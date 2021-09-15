@@ -6,7 +6,7 @@ Authentication code based on Laura Vuorenoja's [kaneli](https://github.com/laura
 1. Install [golang](https://golang.org/)
 1. Create new application in Clickup > Settings > Integrations > Clickup API. Define `http://localhost:4321` as the callback URL.
 1. Copy the app client id and secret from the Clickup UI. 
-1. Copy the team id from the URL, usually a numeral, found here: https://app.clickup.com/<teamid>/rest/of/url
+1. Copy the team id from the URL, usually a numeral, found here: https://app.clickup.com/**\<TEAMID\>**/rest/of/url
 1. Define following env variables:
 
 ```bash
