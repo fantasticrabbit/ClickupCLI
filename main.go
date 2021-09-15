@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -9,10 +11,9 @@ const (
 	argIndexTaskID = 1
 )
 
-type Track struct {
-	Artist string
-	Title  string
-}
+var (
+	teamID = os.Getenv("CLICKUP_TEAM_ID")
+)
 
 func main() {
 	if len(os.Args) < 1 {
@@ -20,9 +21,27 @@ func main() {
 	}
 
 	taskID := os.Args[argIndexTaskID]
+	taskURL := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", taskID)
 	sToken := fetchUserToken()
+	authString := fmt.Sprintf("&#34;%s&#34;", sToken)
 
-	getTaskID(taskID, sToken)
+	client := &http.Client{}
 
-	fmt.Printf("https://app.clickup.com/t/%s\n", taskID)
+	req, _ := http.NewRequest("GET", taskURL, nil)
+
+	req.Header.Add("Authorization", authString)
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		fmt.Println("Errored when sending request to the server")
+		return
+	}
+
+	defer resp.Body.Close()
+	resp_body, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(resp.Status)
+	fmt.Println(string(resp_body))
 }
