@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -26,7 +27,7 @@ var (
 func fetchUserToken() string {
 	const (
 		redirectURL     = "http://localhost:4321"
-		clickupLoginURL = "https://app.clickup.com/api?client_id=%s&redirect_uri=%s"
+		clickupLoginURL = "https://app.clickup.com/api?client_id=%s&redirect_uri=%s&state=%s"
 	)
 
 	if clientID == "" && clientSecret == "" {
@@ -36,23 +37,29 @@ func fetchUserToken() string {
 	// authorization code - received in callback
 	code := ""
 
+	// local state parameter for cross-site request forgery prevention
+	state := fmt.Sprint(rand.Int())
+
 	// loginURL
-	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL)
+	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL, state)
 
 	// channel for signaling that server shutdown can be done
 	messages := make(chan bool)
 
 	// callback handler, redirect from login is handled here
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// code is received as query parameter
-		if codes, ok := r.URL.Query()["code"]; ok && len(codes) == 1 {
-			// save code and signal shutdown
-			code = codes[0]
-			messages <- true
+		// check that the state parameter matches
+		if s, ok := r.URL.Query()["state"]; ok && s[0] == state {
+			// code is received as query parameter
+			if codes, ok := r.URL.Query()["code"]; ok && len(codes) == 1 {
+				// save code and signal shutdown
+				code = codes[0]
+				messages <- true
+			}
 		}
 
 		// redirect user's browser to spotify home page
-		http.Redirect(w, r, "https://app.clickup.com/", http.StatusSeeOther)
+		// http.Redirect(w, r, "https://app.clickup.com/", http.StatusSeeOther)
 	})
 
 	// open user's browser to login page
