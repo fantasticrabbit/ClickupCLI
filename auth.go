@@ -79,12 +79,12 @@ func fetchUserToken() string {
 	}()
 	// start listening for callback - we don't continue until server is shut down
 	log.Println(server.ListenAndServe())
-
+	fmt.Printf(code + "\n")
 	// authentication complete - fetch the access token
 	params := url.Values{}
-	//params.Add("grant_type", "authorization_code")
+	params.Add("client_id", clientID)
+	params.Add("client_secret", clientSecret)
 	params.Add("code", code)
-	params.Add("redirect_uri", redirectURL)
 	data, err := doPostRequest(
 		"https://app.clickup.com/api/v2/oauth/token",
 		params,

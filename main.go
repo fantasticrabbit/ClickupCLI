@@ -22,14 +22,16 @@ func main() {
 
 	taskID := os.Args[argIndexTaskID]
 	taskURL := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", taskID)
+	fmt.Printf(taskURL + "\n")
 	sToken := fetchUserToken()
+	fmt.Printf(sToken + "\n")
 	authString := fmt.Sprintf("&#34;%s&#34;", sToken)
-
+	fmt.Printf(authString + "\n")
 	client := &http.Client{}
 
 	req, _ := http.NewRequest("GET", taskURL, nil)
 
-	req.Header.Add("Authorization", authString)
+	req.Header.Add("Authorization", "&#34;access_token&#34;")
 	req.Header.Add("Content-Type", "application/json")
 
 	resp, err := client.Do(req)
