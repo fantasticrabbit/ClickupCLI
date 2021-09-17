@@ -30,21 +30,15 @@ func fetchUserToken() string {
 		clickupLoginURL = "https://app.clickup.com/api?client_id=%s&redirect_uri=%s&state=%s"
 	)
 
+	//check for env vars and die
 	if clientID == "" && clientSecret == "" {
-		panic(fmt.Errorf("Clickup client ID and secret missing"))
+		panic(fmt.Errorf("environment vars for Clickup client ID and client secret are missing"))
 	}
 
-	// authorization code - received in callback
-	code := ""
-
-	// local state parameter for cross-site request forgery prevention
-	state := fmt.Sprint(rand.Int())
-
-	// loginURL
-	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL, state)
-
-	// channel for signaling that server shutdown can be done
-	messages := make(chan bool)
+	code := ""                                                         // initialize authorization code - received in callback
+	state := fmt.Sprint(rand.Int())                                    // local state parameter for cross-site request forgery prevention
+	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL, state) // loginURL
+	messages := make(chan bool)                                        // channel for signaling that server shutdown can be done
 
 	// callback handler, redirect from login is handled here
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +51,6 @@ func fetchUserToken() string {
 				messages <- true
 			}
 		}
-
 		// redirect user's browser to Clickup home page
 		http.Redirect(w, r, "https://app.clickup.com/", http.StatusSeeOther)
 	})
@@ -66,8 +59,8 @@ func fetchUserToken() string {
 	if err := browser.OpenURL(path); err != nil {
 		panic(fmt.Errorf("failed to open browser for authentication %s", err.Error()))
 	}
-
 	server := &http.Server{Addr: ":4321"}
+
 	// go routine for shutting down the server
 	go func() {
 		okToClose := <-messages
@@ -85,6 +78,7 @@ func fetchUserToken() string {
 	params.Add("client_id", clientID)
 	params.Add("client_secret", clientSecret)
 	params.Add("code", code)
+
 	data, err := doPostRequest(
 		"https://app.clickup.com/api/v2/oauth/token",
 		params,
@@ -94,7 +88,7 @@ func fetchUserToken() string {
 	if err == nil {
 		response := AuthResponse{}
 		if err = json.Unmarshal(data, &response); err == nil {
-			// happy end: token parsed successfully
+			// token parsed successfully
 			return response.AccessToken
 		}
 	}

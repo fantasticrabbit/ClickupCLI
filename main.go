@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -21,7 +22,7 @@ func main() {
 
 	//Authenticate user
 	cToken := fetchUserToken()
-
+	fmt.Println(string(cToken))
 	//Get task as JSON
 	getClickUpTask(taskID, cToken)
 }

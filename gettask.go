@@ -2,29 +2,44 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
 )
 
+/*
 type ClickupResponse struct {
 	Task struct {
-		Items []struct {
-			ExternalUrls struct {
-				Spotify string `json:"spotify"`
-			} `json:"external_urls"`
-			ID  string `json:"id"`
-			URI string `json:"uri"`
-		} `json:"items"`
-	} `json:"tracks"`
+		STUFF HERE?
+	} `json:"task"`
 }
+*/
 
-func getClickUpTask(clickUpTaskID string, authHeader string) {
-	bearerHeader := fmt.Sprintf("Bearer %s", cToken)
+var (
+	CLICKUP_CLIENT_ID = os.Getenv("CLICKUP_CLIENT_ID")
+)
+
+func getClickUpTask(clickUpTaskID string, tokenValue string) {
 	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
 
-	// Get JSON
-	_, err = doJSONRequest(apiPath, http.MethodGet, nil, bearerHeader)
+	client := &http.Client{}
+
+	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
+
+	req.Header.Add("Authorization", tokenValue)
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("X-API-Key", CLICKUP_CLIENT_ID)
+
+	resp, err := client.Do(req)
+
 	if err != nil {
-		return err
+		fmt.Println("Errored when sending request to the server")
+		return
 	}
 
+	defer resp.Body.Close()
+	resp_body, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(resp.Status)
+	fmt.Println(string(resp_body))
 }
