@@ -37,7 +37,7 @@ func fetchUserToken() string {
 
 	code := ""                                                         // initialize authorization code - received in callback
 	state := fmt.Sprint(rand.Int())                                    // local state parameter for cross-site request forgery prevention
-	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL, state) // loginURL
+	path := fmt.Sprintf(clickupLoginURL, clientID, redirectURL, state) // piece together the login URL
 	messages := make(chan bool)                                        // channel for signaling that server shutdown can be done
 
 	// callback handler, redirect from login is handled here
