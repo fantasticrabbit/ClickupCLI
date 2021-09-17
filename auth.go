@@ -58,8 +58,8 @@ func fetchUserToken() string {
 			}
 		}
 
-		// redirect user's browser to spotify home page
-		// http.Redirect(w, r, "https://app.clickup.com/", http.StatusSeeOther)
+		// redirect user's browser to Clickup home page
+		http.Redirect(w, r, "https://app.clickup.com/", http.StatusSeeOther)
 	})
 
 	// open user's browser to login page
@@ -79,7 +79,7 @@ func fetchUserToken() string {
 	}()
 	// start listening for callback - we don't continue until server is shut down
 	log.Println(server.ListenAndServe())
-	fmt.Printf(code + "\n")
+
 	// authentication complete - fetch the access token
 	params := url.Values{}
 	params.Add("client_id", clientID)
@@ -90,6 +90,7 @@ func fetchUserToken() string {
 		params,
 		authHeader,
 	)
+
 	if err == nil {
 		response := AuthResponse{}
 		if err = json.Unmarshal(data, &response); err == nil {
