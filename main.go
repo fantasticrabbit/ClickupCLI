@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -14,15 +13,14 @@ var (
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	taskID := os.Args[argIndexTaskID]
+	if taskID == "" {
 		panic("Task id argument is missing")
 	}
 
-	taskID := os.Args[argIndexTaskID]
-
-	//Authenticate user
+	//Authenticate user, get token
 	cToken := fetchUserToken()
-	fmt.Println(string(cToken))
+
 	//Get task as JSON
 	getClickUpTask(taskID, cToken)
 }

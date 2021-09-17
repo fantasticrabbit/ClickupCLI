@@ -32,6 +32,11 @@ func getClickUpTask(clickUpTaskID string, tokenValue string) {
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 
-	fmt.Println(resp.Status)
-	fmt.Println(string(resp_body))
+	//var resultMap map[string]interface{}
+	//json.Unmarshal([]byte(resp_body), &resultMap)
+
+	//fmt.Println(resultMap["name"])
+	//fmt.Println(resultMap["custom_fields"])
+	//fmt.Println(resp.Status)
+	fmt.Print(string(resp_body))
 }

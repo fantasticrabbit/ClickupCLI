@@ -28,3 +28,11 @@ export CLICKUP_TEAM_ID=1234567
     
 1. The app will open browser for Clickup authentication. Log in and give app permission to retrieve data from the corresponding workspace.
 1. Task details will be downloaded to the current directory in JSON format.
+
+
+## Build .exe for Windows
+
+1. Download source, with golang installed:
+
+```GOOS=windows go build ./...```
+ 
