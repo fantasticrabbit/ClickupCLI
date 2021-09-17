@@ -7,14 +7,6 @@ import (
 	"os"
 )
 
-/*
-type ClickupResponse struct {
-	Task struct {
-		STUFF HERE?
-	} `json:"task"`
-}
-*/
-
 var (
 	CLICKUP_CLIENT_ID = os.Getenv("CLICKUP_CLIENT_ID")
 )
