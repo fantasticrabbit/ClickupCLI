@@ -2,3 +2,4 @@
 .gofetchcutask.exe
 vendor/*
 runit.sh
+.DS_Store
