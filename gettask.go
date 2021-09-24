@@ -4,14 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 )
 
-var (
-	CLICKUP_CLIENT_ID = os.Getenv("CLICKUP_CLIENT_ID")
-)
-
-func getClickUpTask(clickUpTaskID string, tokenValue string) {
+func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
 	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
 
 	client := &http.Client{}
@@ -20,7 +15,7 @@ func getClickUpTask(clickUpTaskID string, tokenValue string) {
 
 	req.Header.Add("Authorization", tokenValue)
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("X-API-Key", CLICKUP_CLIENT_ID)
+	req.Header.Add("X-API-Key", clientID)
 
 	resp, err := client.Do(req)
 

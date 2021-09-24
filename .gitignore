@@ -1,2 +1,4 @@
 .envrc
 .gofetchcutask.exe
+vendor/*
+runit.sh

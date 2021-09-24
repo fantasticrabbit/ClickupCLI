@@ -1,8 +1,3 @@
-# Attribution
-Authentication code based on Laura Vuorenoja's [kaneli](https://github.com/lauravuo/kaneli) application, and corresponding [tutorial on dev.to](https://dev.to/lauravuo/how-to-oauth-from-the-command-line-47j0)
-
-Also, thanks to Isaac Johnson for crucial bit of info on Clickup's API in his [Clickup-Github tutorial](https://www.freshbrewed.science/clickup-and-gitabl-part-2/index.html)
-
 ## Setup to run from code
 
 1. Install [golang](https://golang.org/)
@@ -14,6 +9,7 @@ Also, thanks to Isaac Johnson for crucial bit of info on Clickup's API in his [C
 export CLICKUP_CLIENT_ID=xxx
 export CLICKUP_CLIENT_SECRET=xxx
 ```
+1. Set your re-direct URL port in the vars section of `main.go`.
 
 ## Usage
 
