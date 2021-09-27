@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/Jeffail/gabs"
 )
 
 func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
@@ -25,13 +27,28 @@ func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
 	}
 
 	defer resp.Body.Close()
-	resp_body, _ := ioutil.ReadAll(resp.Body)
+	data, _ := ioutil.ReadAll(resp.Body)
 
-	//var resultMap map[string]interface{}
-	//json.Unmarshal([]byte(resp_body), &resultMap)
+	jsonParsed, err := gabs.ParseJSON(data)
+	if err != nil {
+		panic(err)
+	}
 
-	//fmt.Println(resultMap["name"])
-	//fmt.Println(resultMap["custom_fields"])
-	//fmt.Println(resp.Status)
-	fmt.Print(string(resp_body))
+	// Search JSON
+	fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
+	chainVal := jsonParsed.Path("custom_fields.Chains.value").Data()
+	fmt.Println(chainVal)
+	// Iterate over config options to find chainVal
+	// for chainVal==jsonParsed.Path("custom_fields.Chains.type_config.options")
+
+	//fmt.Println("Get Chain Name:\t", jsonParsed.Path("name").Data())
+	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
+	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
+	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
+
+	//fmt.Println("Get value of Country:\t", jsonParsed.Search("employees", "address", "country").Data())
+	//fmt.Println("ID of first employee:\t", jsonParsed.Path("employees.employee.0.id").String())
+	//fmt.Println("Check Country Exists:\t", jsonParsed.Exists("employees", "address", "countryCode"))
+
+	//fmt.Print(string(data))
 }
