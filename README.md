@@ -26,6 +26,7 @@ export CLICKUP_CLIENT_SECRET=xxx
 
 ## Build .exe for Windows
 
-1. Download source, with golang installed:
-
-```GOOS=windows go build ./...```
+1. push tag to GitHub to create new release .exe 
+   ```
+   git tag vx.x.x -m "new tag message" && git push origin vx.x.x
+   ```
