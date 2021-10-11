@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
@@ -27,11 +28,13 @@ func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 
-	//var resultMap map[string]interface{}
-	//json.Unmarshal([]byte(resp_body), &resultMap)
-
-	//fmt.Println(resultMap["name"])
-	//fmt.Println(resultMap["custom_fields"])
-	//fmt.Println(resp.Status)
-	fmt.Print(string(resp_body))
+	if fileout == "" {
+		fmt.Print(string(resp_body))
+		return
+	} else {
+		err := os.WriteFile(fileout, resp_body, 0644)
+		if err != nil {
+			fmt.Println("Error writing task JSON")
+		}
+	}
 }
