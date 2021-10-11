@@ -1,0 +1,70 @@
+name: goFetchClickUp Win build and release
+
+on:
+  push:
+    tags:
+      - v**
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build for Windows
+      run: GOOS=windows go build -v ./...
+
+    - name: Upload as windows artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows
+        path: goFetchClickUp.exe
+
+  create-release:
+    runs-on: windows-2019
+    needs:
+      - build
+    steps:
+      # Setup!
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Download windows artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: windows
+      - name: Determine logs between newest and previous tags
+        id: git_logs
+        run: |
+          $prev_tag = $(git tag --sort version:refname | tail -n 2 | head -n 1)
+          $curr_tag = $(git tag --sort version:refname | tail -n 1)
+          $logs = $(git log "$prev_tag..$curr_tag" --oneline --pretty='format:%C(auto)%h (%s)')
+          $logs -replace '%','%25'
+          $OFS = "%0D%0A"
+          echo "::set-output name=git_logs::$logs"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: "ACERT Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
+          draft: false
+          prerelease: false
+      - name: Upload goFetchClickUp.exe Release Asset (Windows)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: goFetchClickUp.exe
+          asset_name: goFetchClickUp.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
