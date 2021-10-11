@@ -1,4 +1,4 @@
-module github.com/fantasticrabbit/gofetchcutask
+module github.com/twopt/goFetchClickUp
 
 go 1.15
 
