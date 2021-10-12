@@ -56,7 +56,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: "ACERT Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
+          body: "Clickup CLI Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
           draft: false
           prerelease: false
       - name: Upload cucli.exe Release Asset (Windows)
