@@ -1,4 +1,4 @@
-name: goFetchClickUp Win build and release
+name: Clickup CLI Win build and release
 
 on:
   push:
@@ -19,13 +19,13 @@ jobs:
         go-version: 1.15
 
     - name: Build for Windows
-      run: GOOS=windows go build -v ./...
+      run: GOOS=windows go build -o cucli.exe -v ./...
 
     - name: Upload as windows artifact
       uses: actions/upload-artifact@v2
       with:
         name: windows
-        path: goFetchClickUp.exe
+        path: cucli.exe
 
   create-release:
     runs-on: windows-2019
@@ -59,12 +59,12 @@ jobs:
           body: "ACERT Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
           draft: false
           prerelease: false
-      - name: Upload goFetchClickUp.exe Release Asset (Windows)
+      - name: Upload cucli.exe Release Asset (Windows)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: goFetchClickUp.exe
-          asset_name: goFetchClickUp.exe
+          asset_path: cucli.exe
+          asset_name: cucli.exe
           asset_content_type: application/vnd.microsoft.portable-executable
