@@ -3,3 +3,4 @@
 vendor/*
 runit.sh
 .DS_Store
+sample.json

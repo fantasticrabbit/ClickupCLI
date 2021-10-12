@@ -26,7 +26,7 @@ func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
 	}
 
 	defer resp.Body.Close()
-	resp_body, _ := ioutil.ReadAll(resp.Body)
+	data, _ := ioutil.ReadAll(resp.Body)
 
 	if fileout == "" {
 		fmt.Print(string(resp_body))
