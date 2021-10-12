@@ -21,11 +21,3 @@ export CLICKUP_CLIENT_SECRET=xxx
 1. Task details will be output in JSON to StdOut. You can use the -f flag to output to a specified filename:
     ```
     cucli.exe -t 123456 -f task.json
-
-
-## Build .exe for Windows
-
-1. push tag to GitHub to create new release .exe 
-   ```
-   git tag vx.x.x -m "new tag message" && git push origin vx.x.x
-   ```
