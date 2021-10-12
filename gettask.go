@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/Jeffail/gabs"
+	"os"
 )
 
 func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
@@ -29,26 +28,13 @@ func getClickUpTask(clickUpTaskID, tokenValue, clientID string) {
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body)
 
-	jsonParsed, err := gabs.ParseJSON(data)
-	if err != nil {
-		panic(err)
+	if fileout == "" {
+		fmt.Print(string(resp_body))
+		return
+	} else {
+		err := os.WriteFile(fileout, resp_body, 0644)
+		if err != nil {
+			fmt.Println("Error writing task JSON")
+		}
 	}
-
-	// Search JSON
-	fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
-	chainVal := jsonParsed.Path("custom_fields.Chains.value").Data()
-	fmt.Println(chainVal)
-	// Iterate over config options to find chainVal
-	// for chainVal==jsonParsed.Path("custom_fields.Chains.type_config.options")
-
-	//fmt.Println("Get Chain Name:\t", jsonParsed.Path("name").Data())
-	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
-	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
-	//fmt.Println("Get Project Name:\t", jsonParsed.Path("name").Data())
-
-	//fmt.Println("Get value of Country:\t", jsonParsed.Search("employees", "address", "country").Data())
-	//fmt.Println("ID of first employee:\t", jsonParsed.Path("employees.employee.0.id").String())
-	//fmt.Println("Check Country Exists:\t", jsonParsed.Exists("employees", "address", "countryCode"))
-
-	//fmt.Print(string(data))
 }
