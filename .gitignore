@@ -4,3 +4,4 @@ vendor/*
 runit.sh
 .DS_Store
 sample.json
+new.md
