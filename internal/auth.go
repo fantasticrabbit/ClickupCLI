@@ -67,7 +67,8 @@ func GetCUToken(clientID, clientSecret, localHostPort string) (string, error) {
 		log.Fatal(err)
 	}
 
-	viper.SetConfigFile(home + "/.clickup/token.json")
+	viper.Set("cToken", tok)
+
 	return tok.AccessToken, err
 
 }
