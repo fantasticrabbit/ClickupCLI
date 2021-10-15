@@ -21,7 +21,15 @@ var rootCmd = &cobra.Command{
 	build tools, and send and receive data from your Clickup space.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("confirm auth status before calling")
+		//do auth here?? or in init below??
+		//check for available token
+		//if token not available run auth
+		//use viper to check for redirectURI, client ID and client secret
+		//cToken, _ := GetCUToken(appID, appSecret, redURLport)
+
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
