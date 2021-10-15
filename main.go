@@ -1,6 +1,6 @@
 package main
 
-import "github.com/fantasticrabbit/ClickupCli/cmd"
+import "github.com/fantasticrabbit/ClickupCLI/cmd"
 
 func main() {
 	cmd.Execute()
