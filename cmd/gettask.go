@@ -1,7 +1,7 @@
 package cmd
 
 import (
-    "github.com/fantasticrabbit/clickupcli/internal"
+   	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
