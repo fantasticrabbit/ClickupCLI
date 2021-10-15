@@ -1,7 +1,7 @@
 package cmd
 
 import (
-   	"github.com/fantasticrabbit/ClickupCLI/internal"
+	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,7 +16,7 @@ var gettaskCmd = &cobra.Command{
 		token := viper.GetString("cToken")
 		taskID, _ := cmd.Flags().GetString("taskid")
 
-		internal.getClickUpTask(taskID, token, clientID)
+		internal.GetClickUpTask(taskID, token, clientID)
 	},
 }
 
