@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/pkg/browser"
-	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 )
 
@@ -66,8 +65,6 @@ func GetCUToken(clientID, clientSecret, localHostPort string) (string, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	viper.Set("cToken", tok)
 
 	return tok.AccessToken, err
 

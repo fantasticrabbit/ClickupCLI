@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 
 	"github.com/spf13/viper"
@@ -71,6 +72,12 @@ func initConfig() {
 
 	viper.SetEnvPrefix("clickup")
 	viper.AutomaticEnv() // read in environment variables that match
+
+	tok, err := internal.GetCUToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
+	if err == nil {
+		fmt.Println("auth succeeded")
+	}
+	viper.Set("cToken", tok)
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
