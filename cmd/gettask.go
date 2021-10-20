@@ -19,6 +19,8 @@ var gettaskCmd = &cobra.Command{
 		taskID, _ := cmd.Flags().GetString("taskid")
 		//no file flag:
 		fmt.Println(internal.GetClickUpTask(taskID, token, clientID))
+		//file flag:
+		//if flag=t, write file 'cutask_'+taskid+'.json'
 	},
 }
 

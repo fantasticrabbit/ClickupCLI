@@ -18,7 +18,5 @@ var getCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(getCmd)
-	getCmd.Flags().String("task", "", "get a task based on Clickup task ID")
-	getCmd.Flags().String("output", "", "name of file to output JSON")
 
 }
