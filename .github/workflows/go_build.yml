@@ -48,12 +48,12 @@ jobs:
         path: cucli
 
   create-release:
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     needs:
       - build-windows
       - build-linux
     steps:    
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
       - name: get windows artifact
         uses: actions/download-artifact@v2
