@@ -52,7 +52,9 @@ jobs:
     needs:
       - build-windows
       - build-linux
-    steps:
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: get windows artifact
         uses: actions/download-artifact@v2
         with:
@@ -67,6 +69,8 @@ jobs:
           $prev_tag = $(git tag --sort version:refname | tail -n 2 | head -n 1)
           $curr_tag = $(git tag --sort version:refname | tail -n 1)
           $logs = $(git log "$prev_tag..$curr_tag" --oneline --pretty='format:%C(auto)%h (%s)')
+          $logs -replace '%','%25'
+          $OFS = "%0D%0A"
           echo "::set-output name=git_logs::$logs"
       - name: create release
         id: create_release
