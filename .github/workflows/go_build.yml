@@ -19,7 +19,7 @@ jobs:
         go-version: 1.17
 
     - name: Build for Windows
-      run: GOOS=windows go build -o cucli.exe -v ./...
+      run: make build
 
     - name: Upload as windows artifact
       uses: actions/upload-artifact@v2
