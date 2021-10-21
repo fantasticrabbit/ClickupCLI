@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  build-windows:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,7 +19,7 @@ jobs:
         go-version: 1.17
 
     - name: Build for Windows
-      run: make build
+      run: GOOS=windows go build -o cucli.exe .
 
     - name: Upload as windows artifact
       uses: actions/upload-artifact@v2
@@ -27,19 +27,41 @@ jobs:
         name: windows
         path: cucli.exe
 
-  create-release:
-    runs-on: windows-2019
-    needs:
-      - build
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
-      # Setup!
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Download windows artifact
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build for Linux
+      run: go build -o cucli .
+
+    - name: Upload as linux artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux
+        path: cucli
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - build-windows
+      - build-linux
+    steps:
+      - name: get windows artifact
         uses: actions/download-artifact@v2
         with:
           name: windows
-      - name: Determine logs between newest and previous tags
+      - name: get linux artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: linux
+      - name: determine logs between newest and previous tags
         id: git_logs
         run: |
           $prev_tag = $(git tag --sort version:refname | tail -n 2 | head -n 1)
@@ -48,18 +70,18 @@ jobs:
           $logs -replace '%','%25'
           $OFS = "%0D%0A"
           echo "::set-output name=git_logs::$logs"
-      - name: Create Release
+      - name: create release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: "Clickup CLI Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
           draft: false
           prerelease: false
-      - name: Upload cucli.exe Release Asset (Windows)
+      - name: upload cucli.exe release asset (windows)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,3 +90,12 @@ jobs:
           asset_path: cucli.exe
           asset_name: cucli.exe
           asset_content_type: application/vnd.microsoft.portable-executable
+      - name: upload cucli release asset (linux)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: cucli
+          asset_name: cucli
+          asset_content_type: application/octet-stream
