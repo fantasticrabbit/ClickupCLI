@@ -14,11 +14,11 @@ export CLICKUP_CLIENT_SECRET=xxx
 1. Run the app by passing the -t flag and providing the task id (remove the # at the front of the ID) as command line argument:
 
     ```
-    cucli.exe -g -t 123456   <short version>
-    cucli.exe get task 123456  <long/explicit>
+    cucli.exe get task -t 123456 
     ```
     
 1. The app will open browser for Clickup authentication. Log in and give app permission to retrieve data from the corresponding workspace.
 1. Task details will be output in JSON to StdOut. You can use the -f flag to output to a file clickup_<taskid>.json:
     ```
-    cucli.exe -g -t 123456 -f 
+    cucli.exe get task -t 123456 -f 
+    ```
