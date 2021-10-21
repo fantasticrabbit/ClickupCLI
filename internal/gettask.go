@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func GetClickUpTask(clickUpTaskID, tokenValue, clientID string) string {
+func GetClickUpTask(clickUpTaskID, tokenValue, clientID string) []byte {
 	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
 
 	client := &http.Client{}
@@ -21,13 +21,12 @@ func GetClickUpTask(clickUpTaskID, tokenValue, clientID string) string {
 
 	if err != nil {
 		fmt.Println("Errored when sending request to the server")
-		return err.Error()
 	}
 
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 
-	return string(resp_body)
+	return resp_body
 
 	//  functionalize, call with cmd/gettask.go flag??
 	//	if fileout == "" {

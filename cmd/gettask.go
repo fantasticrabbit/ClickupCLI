@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
@@ -17,10 +18,19 @@ var gettaskCmd = &cobra.Command{
 		clientID := viper.GetString("CLIENT_ID")
 		token := viper.GetString("cToken")
 		taskID, _ := cmd.Flags().GetString("taskid")
-		//no file flag:
-		fmt.Println(internal.GetClickUpTask(taskID, token, clientID))
-		//file flag:
-		//if flag=t, write file 'cutask_'+taskid+'.json'
+		fileFlag, _ := cmd.Flags().GetBool("file")
+		//if file flag=t, write file 'cutask_'+taskid+'.json'
+		if fileFlag == false {
+			fmt.Println(string(internal.GetClickUpTask(taskID, token, clientID)))
+			return
+		} else {
+			filenm := "clickup_" + taskID + ".json"
+			data := internal.GetClickUpTask(taskID, token, clientID)
+			err := os.WriteFile(filenm, data, 0644)
+			if err != nil {
+				fmt.Println("Error writing task JSON")
+			}
+		}
 	},
 }
 

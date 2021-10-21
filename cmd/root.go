@@ -12,6 +12,7 @@ import (
 
 var (
 	cfgFile string
+	home, _ = os.UserHomeDir()
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -59,28 +60,27 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".clickup" (without extension).
-		viper.AddConfigPath(home + "/.clickup")
+		// Search config in home/.config directory with name "clickup.yaml" (without extension).
+		viper.AddConfigPath(home + "/.config/clickup/")
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("config")
+		viper.SetConfigName("clickup")
 
 	}
 
 	viper.SetEnvPrefix("clickup")
 	viper.AutomaticEnv() // read in environment variables that match
 
-	tok, err := internal.GetCUToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
-	if err == nil {
-		fmt.Println("auth succeeded")
-	}
-	viper.Set("cToken", tok)
-
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		viper.ReadInConfig()
+	} else {
+
+		tok, err := internal.GetCUToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
+		if err == nil {
+			fmt.Println("auth succeeded")
+		}
+		viper.Set("cToken", tok)
+		viper.WriteConfigAs(home + "/.config/clickup/clickup.yaml")
 	}
 }
