@@ -21,16 +21,9 @@ var rootCmd = &cobra.Command{
 	Short: "ClickupCLI allows access to ClickUp from the command line",
 	Long: `ClickupCLI allows you to use data from Clickup to drive scripts,
 	build tools, and send and receive data from your Clickup space.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
+
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("confirm auth status before calling")
-		//do auth here?? or in init below??
-		//check for available token
-		//if token not available run auth
-		//use viper to check for redirectURI, client ID and client secret
-		//cToken, _ := GetCUToken(appID, appSecret, redURLport)
-
 	},
 }
 
@@ -43,15 +36,11 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clickup.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
