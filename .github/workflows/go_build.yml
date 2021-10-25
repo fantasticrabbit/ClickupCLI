@@ -1,4 +1,4 @@
-name: Clickup CLI Win build and release
+name: Clickup CLI build and release
 
 on:
   push:
@@ -19,13 +19,13 @@ jobs:
         go-version: 1.17
 
     - name: Build for Windows
-      run: GOOS=windows go build -o cucli.exe .
+      run: GOOS=windows go build -o clickup-windows.exe .
 
     - name: Upload as windows artifact
       uses: actions/upload-artifact@v2
       with:
         name: windows
-        path: cucli.exe
+        path: clickup-windows.exe
 
   build-linux:
     runs-on: ubuntu-latest
@@ -39,19 +39,40 @@ jobs:
         go-version: 1.17
 
     - name: Build for Linux
-      run: go build -o cucli .
+      run: go build -o clickup-ubuntu .
 
     - name: Upload as linux artifact
       uses: actions/upload-artifact@v2
       with:
         name: linux
-        path: cucli
+        path: clickup-ubuntu
+
+  build-macos:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build for MacOS
+      run: GOOS=darwin go build -o clickup-macos .
+
+    - name: Upload as macos artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: macos
+        path: clickup-macos
 
   create-release:
     runs-on: windows-2019
     needs:
       - build-windows
       - build-linux
+      - build-darwin
     steps:    
       - name: checkout
         uses: actions/checkout@v2
@@ -63,6 +84,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: linux
+      - name: get macos artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: macos          
       - name: determine logs between newest and previous tags
         id: git_logs
         run: |
@@ -83,14 +108,14 @@ jobs:
           body: "Clickup CLI Build ${{ github.ref }}:\n${{ steps.git_logs.outputs.git_logs }}"
           draft: false
           prerelease: false
-      - name: upload cucli.exe release asset (windows)
+      - name: upload clickup.exe release asset (windows)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: cucli.exe
-          asset_name: cucli.exe
+          asset_path: clickup-windows.exe
+          asset_name: clickup-windows.exe
           asset_content_type: application/vnd.microsoft.portable-executable
       - name: upload cucli release asset (linux)
         uses: actions/upload-release-asset@v1
@@ -98,6 +123,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: cucli
-          asset_name: cucli
+          asset_path: clickup-ubuntu
+          asset_name: clickup-ubuntu
           asset_content_type: application/octet-stream
+      - name: upload cucli release asset (macos)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: clickup-macos
+          asset_name: clickup-macos
+          asset_content_type: application/octet-stream          
