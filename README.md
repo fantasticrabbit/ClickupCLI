@@ -14,14 +14,14 @@ export CLICKUP_CLIENT_SECRET=xxx
 1. Run the app by passing the -t flag and providing the task id (remove the # at the front of the ID) as command line argument:
 
     ```
-    clickup.exe get -t 123456 <short>
-    clickup.exe get --task 123456 <long/explicit>
+    clickup get -t 123456 <short>
+    clickup get --task 123456 <long/explicit>
     ```
     
 1. The app will open browser for Clickup authentication. Log in and give app permission to retrieve data from the corresponding workspace.
 1. Task details will be output in JSON to StdOut. You can use the -f flag to output to a file clickup_<taskid>.json:
     ```
-    clickup.exe get -t 123456 -f <short>
-    clickup.exe get -t 123456 --file <long/explicit>
+    clickup get -t 123456 -f <short>
+    clickup get -t 123456 --file <long/explicit>
     ```
 1. returns clickup_123456.json  
