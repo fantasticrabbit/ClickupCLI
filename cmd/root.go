@@ -36,11 +36,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clickup.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/clickup/clickup.yaml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -53,7 +49,6 @@ func initConfig() {
 		viper.AddConfigPath(home + "/.config/clickup/")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("clickup")
-
 	}
 
 	viper.SetEnvPrefix("clickup")
