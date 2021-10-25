@@ -72,7 +72,7 @@ jobs:
     needs:
       - build-windows
       - build-linux
-      - build-darwin
+      - build-macos
     steps:    
       - name: checkout
         uses: actions/checkout@v2
@@ -117,7 +117,7 @@ jobs:
           asset_path: clickup-windows.exe
           asset_name: clickup-windows.exe
           asset_content_type: application/vnd.microsoft.portable-executable
-      - name: upload cucli release asset (linux)
+      - name: upload clickup release asset (linux)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -126,7 +126,7 @@ jobs:
           asset_path: clickup-ubuntu
           asset_name: clickup-ubuntu
           asset_content_type: application/octet-stream
-      - name: upload cucli release asset (macos)
+      - name: upload clickup release asset (macos)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
