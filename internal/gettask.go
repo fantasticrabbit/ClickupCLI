@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func GetClickUpTask(clickUpTaskID, tokenValue, clientID string) []byte {
+func GetTask(clickUpTaskID, tokenValue, clientID string) []byte {
 	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
 
 	client := &http.Client{}

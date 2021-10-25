@@ -21,11 +21,11 @@ var getCmd = &cobra.Command{
 		fileFlag, _ := cmd.Flags().GetBool("file")
 
 		if !fileFlag {
-			fmt.Println(string(internal.GetClickUpTask(taskID, token, clientID)))
+			fmt.Println(string(internal.GetTask(taskID, token, clientID)))
 			return
 		} else {
 			filenm := "clickup_" + taskID + ".json"
-			data := internal.GetClickUpTask(taskID, token, clientID)
+			data := internal.GetTask(taskID, token, clientID)
 			err := os.WriteFile(filenm, data, 0644)
 			if err != nil {
 				fmt.Println("Error writing task JSON")
