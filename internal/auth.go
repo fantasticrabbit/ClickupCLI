@@ -11,7 +11,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func GetCUToken(clientID, clientSecret, localHostPort string) (string, error) {
+func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
 	ctx := context.Background()
 	redirectURL := "http://localhost:" + localHostPort
 	conf := &oauth2.Config{
