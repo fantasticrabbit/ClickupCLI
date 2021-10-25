@@ -42,9 +42,9 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Search config in home/.config directory with name "clickup.yaml" (without extension).
-		viper.AddConfigPath(home + "/.config/clickup/")
+		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName("clickup")
+		viper.SetConfigName(".clickup")
 	}
 
 	viper.SetEnvPrefix("clickup")
@@ -52,15 +52,26 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		// fmt.Fprintln(os.Stderr, "Using config file")
 		viper.ReadInConfig()
-	} else {
+	}
 
+	viper.SetDefault("redirect_port", "4321")
+
+	// Check for required config keys:
+	if idset := viper.IsSet("client_id"); idset == false {
+		panic("No Client ID provided, check configuration")
+	}
+
+	if secretset := viper.IsSet("client_secret"); secretset == false {
+		panic("No Client Secret provided, check configuration")
+	}
+
+	if !viper.InConfig("ctoken") {
 		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "auth failed")
 		}
 		viper.Set("cToken", token)
-		viper.WriteConfigAs(home + "/.config/clickup/clickup.yaml")
+		viper.WriteConfigAs(home + "/.clickup.yaml")
 	}
 }
