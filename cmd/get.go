@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 		token := viper.GetString("ctoken")
 		taskID, _ := cmd.Flags().GetString("task")
 		fileFlag, _ := cmd.Flags().GetBool("file")
-		//if file flag=t, write file 'cutask_'+taskid+'.json'
+
 		if !fileFlag {
 			fmt.Println(string(internal.GetClickUpTask(taskID, token, clientID)))
 			return
