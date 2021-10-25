@@ -56,11 +56,11 @@ func initConfig() {
 		viper.ReadInConfig()
 	} else {
 
-		tok, err := internal.GetCUToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
-		if err == nil {
-			fmt.Println("auth succeeded")
+		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "auth failed")
 		}
-		viper.Set("cToken", tok)
+		viper.Set("cToken", token)
 		viper.WriteConfigAs(home + "/.config/clickup/clickup.yaml")
 	}
 }
