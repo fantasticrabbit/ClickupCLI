@@ -3,7 +3,7 @@ PREFIX?=$(shell pwd)
 
 # Setup name variables for the package/tool
 NAME := clickup
-PKG := github.com/fantasticrabbit/$(NAME)
+PKG := github.com/fantasticrabbit/$(NAME)cli
 
 # Set any default go build tags
 BUILDTAGS :=
@@ -46,12 +46,6 @@ static: ## Builds a static executable
 				${GO_LDFLAGS_STATIC} -o $(NAME) .
 
 all: clean build install
-
-.PHONY: dep
-dep: ## Pulls in package dependencies
-	@echo "+ $@"
-	$(GO) mod download
-	$(GO) mod tidy
 	
 .PHONY: install
 install: ## Installs the executable or package
@@ -99,24 +93,6 @@ clean: ## Cleanup any build binaries or packages
 	$(RM) $(NAME)
 	$(RM) -r $(BUILDDIR)
 
-# if this session isn't interactive, then we don't want to allocate a
-# TTY, which would fail, but if it is interactive, we do want to attach
-# so that the user can send e.g. ^C through.
-INTERACTIVE := $(shell [ -t 0 ] && echo 1 || echo 0)
-ifeq ($(INTERACTIVE), 1)
-    DOCKER_FLAGS += -t
-endif
-
-GRPC_API_DIR=api/grpc
-.PHONY: protoc
-protoc: $(CURDIR)/$(GRPC_API_DIR)/api.pb.go ## Generate the protobuf files
-
-$(CURDIR)/$(GRPC_API_DIR)/api.pb.go: image $(CURDIR)/$(GRPC_API_DIR)/api.proto
-			docker run $(DOCKER_FLAGS) \
-						$(DOCKER_IMAGE) \
-						protoc -I ./$(GRPC_API_DIR) \
-						./$(GRPC_API_DIR)/api.proto \
-						--go_out=plugins=grpc:$(GRPC_API_DIR)
 
 .PHONY: help
 help: ## Show help messages for make targets
