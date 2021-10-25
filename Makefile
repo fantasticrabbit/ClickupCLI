@@ -2,7 +2,7 @@
 PREFIX?=$(shell pwd)
 
 # Setup name variables for the package/tool
-NAME := cucli
+NAME := clickup
 PKG := github.com/fantasticrabbit/$(NAME)
 
 # Set any default go build tags
@@ -46,43 +46,6 @@ static: ## Builds a static executable
 				${GO_LDFLAGS_STATIC} -o $(NAME) .
 
 all: clean build install
-## all: clean build fmt lint test staticcheck vet install ## Runs a clean, build, fmt, lint, test, staticcheck, vet and install
-## 
-## .PHONY: fmt
-## fmt: ## Verifies all files have been `gofmt`ed
-## 	@echo "+ $@"
-## 	@gofmt -s -l . | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
-## 
-## .PHONY: lint
-## lint: ## Verifies `golint` passes
-## 	@echo "+ $@"
-## 	@golint ./... | grep -v '.pb.go:' | grep -v vendor | tee /dev/stderr
-## 
-## .PHONY: test
-## test: ## Runs the go tests
-## 	@echo "+ $@"
-## 	@$(GO) test -v -tags "$(BUILDTAGS) cgo" $(shell $(GO) list ./... | grep -v vendor) |  sed ''/PASS/s//$(shell printf "\033[32mPASS\033[0m")/'' | sed ''/FAIL/s//$(shell printf "\033[31mFAIL\033[0m")/''
-## 
-## .PHONY: vet
-## vet: ## Verifies `go vet` passes
-## 	@echo "+ $@"
-## 	@$(GO) vet $(shell $(GO) list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
-## 
-## .PHONY: staticcheck
-## staticcheck: ## Verifies `staticcheck` passes
-## 	@echo "+ $@"
-## 	@staticcheck $(shell $(GO) list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
-## 
-## .PHONY: cover
-## cover: ## Runs go test with coverage
-## 	@echo "" > coverage.txt
-## 	@for d in $(shell $(GO) list ./... | grep -v vendor); do \
-## 		$(GO) test -race -coverprofile=profile.out -covermode=atomic "$$d"; \
-## 		if [ -f profile.out ]; then \
-## 			cat profile.out >> coverage.txt; \
-## 			rm profile.out; \
-## 		fi; \
-## 	done;
 
 .PHONY: dep
 dep: ## Pulls in package dependencies
@@ -124,18 +87,6 @@ release: *.go VERSION.txt ## Builds the cross-compiled binaries, naming them in 
 	@echo "+ $@"
 	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildrelease,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
 
-## .PHONY: bump-version
-## BUMP := patch
-## bump-version: ## Bump the version in the version file. Set BUMP to [ patch | major | minor ]
-## 	@$(GO) get -u github.com/jessfraz/junk/sembump # update sembump tool
-## 	$(eval NEW_VERSION = $(shell sembump --kind $(BUMP) $(VERSION)))
-## 	@echo "Bumping VERSION.txt from $(VERSION) to $(NEW_VERSION)"
-## 	echo $(NEW_VERSION) > VERSION.txt
-## 	@echo "Updating links to download binaries in README.md"
-## 	sed -i s/$(VERSION)/$(NEW_VERSION)/g README.md
-## 	git add VERSION.txt README.md
-## 	git commit -vam "Bump version to $(NEW_VERSION)"
-## 	@echo "Run make tag to create and push the tag for new version $(NEW_VERSION)"
 
 .PHONY: tag
 tag: ## Create a new git tag to prepare to build a release

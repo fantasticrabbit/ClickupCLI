@@ -27,15 +27,4 @@ func GetClickUpTask(clickUpTaskID, tokenValue, clientID string) []byte {
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 
 	return resp_body
-
-	//  functionalize, call with cmd/gettask.go flag??
-	//	if fileout == "" {
-	//		fmt.Print(string(resp_body))
-	//		return
-	//	} else {
-	//		err := os.WriteFile(fileout, resp_body, 0644)
-	//		if err != nil {
-	//			fmt.Println("Error writing task JSON")
-	//		}
-	//	}
 }

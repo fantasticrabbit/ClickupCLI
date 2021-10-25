@@ -15,20 +15,16 @@ var (
 	home, _ = os.UserHomeDir()
 )
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cucli",
+	Use:   "clickup",
 	Short: "ClickupCLI allows access to ClickUp from the command line",
 	Long: `ClickupCLI allows you to use data from Clickup to drive scripts,
 	build tools, and send and receive data from your Clickup space.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("confirm auth status before calling")
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
@@ -56,7 +52,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		// fmt.Fprintln(os.Stderr, "Using config file")
 		viper.ReadInConfig()
 	} else {
 
