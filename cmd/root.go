@@ -32,10 +32,10 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/clickup/clickup.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clickup.yaml)")
 }
 
-// initConfig reads in config file and ENV variables if set.
+// initConfig reads in config file, ENV variables if set, and determines authentication steps
 func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
@@ -64,7 +64,7 @@ func initConfig() {
 		panic("No Client Secret provided, check configuration")
 	}
 
-	if !viper.InConfig("ctoken") {
+	if !viper.InConfig("ctoken") || viper.GetString("ctoken") == "" {
 		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "auth failed")
