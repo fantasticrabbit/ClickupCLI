@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// logoutCmd represents the logout command
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "Log out of a Clickup workspace",
@@ -15,7 +14,7 @@ var logoutCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleted authentication token")
 		viper.Set("ctoken", "")
-		viper.WriteConfigAs(home + "/.clickup.yaml")
+		viper.WriteConfigAs(home + "/.clickup/config.yaml")
 	},
 }
 
