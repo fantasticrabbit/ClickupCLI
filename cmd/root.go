@@ -31,7 +31,6 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clickup.yaml)")
 }
 
@@ -41,8 +40,8 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Search config in home/.config directory with name "clickup.yaml" (without extension).
-		viper.SetConfigFile(home + "/.clickup.yaml")
+		// Set config in home/.clickup/config.yaml
+		viper.SetConfigFile(home + "/.clickup/config.yaml")
 	}
 
 	viper.SetEnvPrefix("clickup")
@@ -70,6 +69,6 @@ func initConfig() {
 			fmt.Fprintln(os.Stderr, "auth failed")
 		}
 		viper.Set("cToken", token)
-		viper.WriteConfigAs(home + "/.clickup.yaml")
+		viper.WriteConfigAs(home + "/.clickup/config.yaml")
 	}
 }
