@@ -44,7 +44,7 @@ func initConfig() {
 		viper.SetConfigFile(home + "/.clickup/config.yaml")
 	}
 
-	viper.SetEnvPrefix("clickup")
+	viper.SetEnvPrefix("CLICKUP")
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
