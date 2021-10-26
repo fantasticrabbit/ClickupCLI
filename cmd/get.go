@@ -27,7 +27,7 @@ var getCmd = &cobra.Command{
 			data := internal.GetTask(taskID, token, clientID)
 			err := os.WriteFile(filenm, data, 0644)
 			if err != nil {
-				fmt.Println("Error writing task JSON")
+				fmt.Fprintln(os.Stderr, "Error writing task JSON")
 			}
 		}
 	},
