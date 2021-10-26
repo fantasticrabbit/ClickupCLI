@@ -64,7 +64,7 @@ func initConfig() {
 	}
 
 	if !viper.InConfig("ctoken") || viper.GetString("ctoken") == "" {
-		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), "4321")
+		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("redirect_port"))
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "auth failed")
 		}
