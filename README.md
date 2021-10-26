@@ -26,7 +26,7 @@ export CLICKUP_REDIRECT_PORT=9999  (this is optional, will default to port 4321,
     ```
     
 1. Task details will be output in JSON to StdOut. 
-1. You can use the -f flag to output to a file clickup_<taskid>.json:
+1. You can use the -f flag to output to a file `clickup_<taskid>.json`:
     ```
     clickup get -t 123456 -f <short>
     clickup get -t 123456 --file <long/explicit>
