@@ -42,9 +42,7 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Search config in home/.config directory with name "clickup.yaml" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".clickup")
+		viper.SetConfigFile(home + "/.clickup.yaml")
 	}
 
 	viper.SetEnvPrefix("clickup")
