@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//requests the JSON data for all fields in a Clickup task or subtask
 func GetTask(clickUpTaskID, tokenValue, clientID string) []byte {
 	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
 

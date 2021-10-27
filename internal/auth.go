@@ -11,6 +11,8 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// accepts a client ID, client secret, and localhost port, and implements
+// webserver to allow end-user to authenticate, returning authorization token
 func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
 	ctx := context.Background()
 	redirectURL := "http://localhost:" + localHostPort
