@@ -41,6 +41,15 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Set config in home/.clickup/config.yaml
+		_, err := os.Stat(home + "/.clickup")
+
+		if os.IsNotExist(err) {
+			errDir := os.MkdirAll(home+"/.clickup", 0755)
+			if errDir != nil {
+				fmt.Fprintln(os.Stderr, "cannot create .clickup config folder:"+home+"/.clickup")
+			}
+
+		}
 		viper.SetConfigFile(home + "/.clickup/config.yaml")
 	}
 
@@ -55,11 +64,11 @@ func initConfig() {
 	viper.SetDefault("redirect_port", "4321")
 
 	// Check for required config keys:
-	if idset := viper.IsSet("client_id"); idset == false {
+	if !(viper.IsSet("client_id")) {
 		panic("No Client ID provided, check configuration")
 	}
 
-	if secretset := viper.IsSet("client_secret"); secretset == false {
+	if !(viper.IsSet("client_secret")) {
 		panic("No Client Secret provided, check configuration")
 	}
 
