@@ -36,6 +36,6 @@ var taskCmd = &cobra.Command{
 func init() {
 	getCmd.AddCommand(taskCmd)
 
-	getCmd.Flags().StringP("taskid", "i", "", "Clickup task ID to get")
-	getCmd.Flags().BoolP("file", "f", false, "output to file <taskID>.json")
+	taskCmd.Flags().StringP("taskid", "i", "", "Clickup task ID to get")
+	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
 }
