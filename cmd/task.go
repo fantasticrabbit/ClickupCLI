@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
@@ -16,8 +17,13 @@ var taskCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		clientID := viper.GetString("client_id")
 		token := viper.GetString("ctoken")
-		taskID, _ := cmd.Flags().GetString("taskid")
 		fileFlag, _ := cmd.Flags().GetBool("file")
+
+		if len(args) != 1 {
+			fmt.Fprintln(os.Stderr, "Incorrect arguments, usage: clickup get task 123456")
+		}
+
+		taskID := strings.Replace(strings.Join(args, ","), "#", "", -1)
 
 		if !fileFlag {
 			fmt.Println(string(internal.GetTask(taskID, token, clientID)))
@@ -36,6 +42,5 @@ var taskCmd = &cobra.Command{
 func init() {
 	getCmd.AddCommand(taskCmd)
 
-	taskCmd.Flags().StringP("taskid", "i", "", "Clickup task ID to get")
 	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
 }
