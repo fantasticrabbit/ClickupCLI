@@ -7,7 +7,7 @@
 ```
 export CLICKUP_CLIENT_ID=xxx
 export CLICKUP_CLIENT_SECRET=xxx
-export CLICKUP_REDIRECT_PORT=9999  (this is optional, will default to port 4321, just make sure it matches in the Clickup custom app definition above.)
+export CLICKUP_REDIRECT_PORT=9999  (optional, CLI will default to port 4321, just make sure it matches the Clickup custom app definition as described above.)
 ```
 
 ## Usage  
@@ -18,18 +18,17 @@ export CLICKUP_REDIRECT_PORT=9999  (this is optional, will default to port 4321,
 ### Get Tasks  
 
 1. From the Clickup app, copy the TaskID for the task you'd like to retrieve (e.g. `#123456`).  
-1. Execute the app by passing the -t flag and providing the task ID (remove the # at the front of the ID) as command line argument:
+1. Provide the task ID as command line argument (with or without the "#" prefix):
 
     ```
-    clickup get -t 123456 <short>
-    clickup get --task 123456 <long/explicit>
+    clickup get task #123456
     ```
     
 1. Task details will be output in JSON to StdOut. 
 1. You can use the -f flag to output to a file `clickup_<taskid>.json`:
     ```
-    clickup get -t 123456 -f <short>
-    clickup get -t 123456 --file <long/explicit>
+    clickup get task 123456 -f         <short>
+    clickup get task 123456 --file     <long/explicit>
     ```
 
 ### Logout
