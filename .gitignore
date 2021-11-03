@@ -1,8 +1,9 @@
 .envrc
-.gofetchcutask.exe
+clickup
+clickup.exe
 vendor/*
 runit.sh
 .DS_Store
-sample.json
+*.json
 new.md
 builds/*
