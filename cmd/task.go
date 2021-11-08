@@ -23,7 +23,8 @@ var taskCmd = &cobra.Command{
 			fmt.Fprintln(os.Stderr, "Incorrect arguments, usage: clickup get task 123456")
 		}
 
-		taskID := strings.Replace(strings.Join(args, ","), "#", "", -1)
+		//taskID := strings.Replace(strings.Join(args, ","), "#", "", -1)
+		taskID := strings.Trim(args[0], "#")
 
 		if !fileFlag {
 			fmt.Println(string(internal.GetTask(taskID, token, clientID)))
