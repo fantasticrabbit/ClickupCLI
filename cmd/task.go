@@ -15,23 +15,21 @@ var taskCmd = &cobra.Command{
 	Short: "Get data for a single task",
 	Long:  `Request JSON data for a single task in an authorized Clickup workspace`,
 	Run: func(cmd *cobra.Command, args []string) {
-		clientID := viper.GetString("client_id")
-		token := viper.GetString("ctoken")
-		fileFlag, _ := cmd.Flags().GetBool("file")
-
 		if len(args) != 1 {
 			fmt.Fprintln(os.Stderr, "Incorrect arguments, usage: clickup get task 123456")
 		}
-
-		//taskID := strings.Replace(strings.Join(args, ","), "#", "", -1)
 		taskID := strings.Trim(args[0], "#")
+		token := viper.GetString("ctoken")
+		clientID := viper.GetString("client_id")
+		fileFlag, _ := cmd.Flags().GetBool("file")
+		data := internal.GetTask(taskID, token, clientID)
+		filenm := "clickup_" + taskID + ".json"
 
 		if !fileFlag {
-			fmt.Println(string(internal.GetTask(taskID, token, clientID)))
+			fmt.Println(string(data))
 			return
 		} else {
-			filenm := "clickup_" + taskID + ".json"
-			data := internal.GetTask(taskID, token, clientID)
+
 			err := os.WriteFile(filenm, data, 0644)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, "Error writing task JSON")
