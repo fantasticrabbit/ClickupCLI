@@ -11,6 +11,10 @@ import (
 	"golang.org/x/oauth2"
 )
 
+type auther interface {
+	GetToken(string, string, string) (string, error)
+}
+
 // accepts a client ID, client secret, and localhost port, and implements
 // webserver to allow end-user to authenticate, returning authorization token
 func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
@@ -47,7 +51,7 @@ func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
 
 	// open user's browser to login page
 	if err := browser.OpenURL(authPath); err != nil {
-		panic(fmt.Errorf("failed to open browser for authentication %s", err.Error()))
+		log.Fatalln("failed to open browser for authentication", err)
 	}
 
 	server := &http.Server{Addr: ":" + localHostPort}
@@ -56,7 +60,7 @@ func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
 		okToClose := <-messages
 		if okToClose {
 			if err := server.Shutdown(context.Background()); err != nil {
-				log.Println("Failed to shutdown server", err)
+				log.Fatalln("Failed to shutdown server", err)
 			}
 		}
 	}()
@@ -65,7 +69,7 @@ func GetToken(clientID, clientSecret, localHostPort string) (string, error) {
 
 	tok, err := conf.Exchange(ctx, code)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	return tok.AccessToken, err
