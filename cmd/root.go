@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
-
 	"github.com/spf13/viper"
 )
 
@@ -20,7 +19,6 @@ var rootCmd = &cobra.Command{
 	Short: "ClickupCLI allows access to ClickUp from the command line",
 	Long: `ClickupCLI allows you to use data from Clickup to drive scripts,
 	build tools, and send and receive data from your Clickup space.`,
-
 	Run: func(cmd *cobra.Command, args []string) {
 	},
 }
@@ -42,13 +40,11 @@ func initConfig() {
 	} else {
 		// Set config in home/.clickup/config.yaml
 		_, err := os.Stat(home + "/.clickup")
-
 		if os.IsNotExist(err) {
 			errDir := os.MkdirAll(home+"/.clickup", 0755)
 			if errDir != nil {
-				fmt.Fprintln(os.Stderr, "cannot create .clickup config folder:"+home+"/.clickup")
+				log.Fatalln("cannot create .clickup config folder:" + home + "/.clickup")
 			}
-
 		}
 		viper.SetConfigFile(home + "/.clickup/config.yaml")
 	}
@@ -60,22 +56,19 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		viper.ReadInConfig()
 	}
-
-	viper.SetDefault("redirect_port", "4321")
-
 	// Check for required config keys:
 	if !(viper.IsSet("client_id")) {
-		panic("No Client ID provided, check configuration")
+		log.Fatalln("No Client ID provided, check configuration")
 	}
-
 	if !(viper.IsSet("client_secret")) {
-		panic("No Client Secret provided, check configuration")
+		log.Fatalln("No Client Secret provided, check configuration")
 	}
+	viper.SetDefault("redirect_port", "4321")
 
 	if !viper.InConfig("ctoken") || viper.GetString("ctoken") == "" {
 		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("redirect_port"))
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "auth failed")
+			log.Fatalln("auth failed")
 		}
 		viper.Set("cToken", token)
 		viper.WriteConfigAs(home + "/.clickup/config.yaml")
