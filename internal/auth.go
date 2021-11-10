@@ -11,10 +11,6 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type auther interface {
-	GetToken(string, string, string) (string, error)
-}
-
 // accepts a client ID, client secret, and localhost port, and implements
 // webserver to allow end-user to authenticate, returning authorization token
 func GetToken(clientID, clientSecret, localHostPort string) (string, error) {

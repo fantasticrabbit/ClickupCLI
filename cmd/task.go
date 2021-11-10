@@ -24,18 +24,20 @@ var taskCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 
-		taskID := strings.Trim(args[0], "#")
-		token := viper.GetString("ctoken")
-		clientID := viper.GetString("client_id")
-		fileFlag, _ := cmd.Flags().GetBool("file")
-		data := internal.GetTask(taskID, token, clientID)
-		filenm := "clickup_" + taskID + ".json"
+		customFlag, _ := cmd.Flags().GetBool("custom")
 
+		var t = internal.TaskRequest{
+			TaskID:     strings.Trim(args[0], "#"),
+			CustomTask: customFlag,
+			TeamID:     viper.GetString("team_id"),
+		}
+
+		data := internal.GetJSON(t)
+		fileFlag, _ := cmd.Flags().GetBool("file")
 		if !fileFlag {
 			fmt.Println(string(data))
-			return
 		} else {
-			err := os.WriteFile(filenm, data, 0644)
+			err := os.WriteFile("clickup_"+t.TaskID+".json", data, 0644)
 			if err != nil {
 				log.Fatalln("Error writing task JSON")
 			}
@@ -46,4 +48,5 @@ var taskCmd = &cobra.Command{
 func init() {
 	getCmd.AddCommand(taskCmd)
 	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
+	taskCmd.Flags().BoolP("custom", "c", false, "task id provided is a clickup custom task id")
 }
