@@ -56,17 +56,9 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		viper.ReadInConfig()
 	}
-	// Check for required config keys:
-	if !(viper.IsSet("client_id")) {
-		log.Fatalln("No Client ID provided, check configuration")
-	}
-	if !(viper.IsSet("client_secret")) {
-		log.Fatalln("No Client Secret provided, check configuration")
-	}
-	viper.SetDefault("redirect_port", "4321")
 
 	if !viper.InConfig("ctoken") || viper.GetString("ctoken") == "" {
-		token, err := internal.GetToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("redirect_port"))
+		token, err := internal.GetToken()
 		if err != nil {
 			log.Fatalln("auth failed")
 		}
