@@ -2,9 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
-	"log"
-	"os"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
@@ -31,17 +28,7 @@ var taskCmd = &cobra.Command{
 			TeamID:     viper.GetString("team_id"),
 			Subtasks:   subtasksFlag,
 		}
-		data := internal.GetJSON(t)
-
-		fileFlag, _ := cmd.Flags().GetBool("file")
-		if !fileFlag {
-			fmt.Println(string(data))
-		} else {
-			err := os.WriteFile("clickup_"+t.TaskID+".json", data, 0644)
-			if err != nil {
-				log.Fatalln("Error writing task JSON")
-			}
-		}
+		internal.GetJSON(t)
 	},
 }
 

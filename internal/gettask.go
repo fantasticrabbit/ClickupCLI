@@ -2,6 +2,8 @@ package internal
 
 import (
 	"fmt"
+	"log"
+	"os"
 )
 
 type TaskRequest struct {
@@ -19,5 +21,12 @@ func (t TaskRequest) BuildPath() string {
 	} else {
 		return fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/?custom_task_ids=%t&team_id=%s&include_subtasks=%t",
 			t.TaskID, t.CustomTask, t.TeamID, t.Subtasks)
+	}
+}
+
+func (t TaskRequest) WriteOut(payload []byte) {
+	err := os.WriteFile("clickup_"+t.TaskID+".json", payload, 0644)
+	if err != nil {
+		log.Fatalln("Error writing task JSON")
 	}
 }
