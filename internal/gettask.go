@@ -2,30 +2,22 @@ package internal
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 )
 
-//requests the JSON data for all fields in a Clickup task or subtask
-func GetTask(clickUpTaskID, tokenValue, clientID string) []byte {
-	apiPath := fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/", clickUpTaskID)
+type TaskRequest struct {
+	TaskID     string
+	CustomTask bool
+	TeamID     string
+	Subtasks   bool
+}
 
-	client := &http.Client{}
-
-	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
-
-	req.Header.Add("Authorization", tokenValue)
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("X-API-Key", clientID)
-
-	resp, err := client.Do(req)
-
-	if err != nil {
-		fmt.Println("Errored when sending request to the server")
+//Builds the API path for a Clickup task request
+func (t TaskRequest) BuildPath() string {
+	if !t.CustomTask {
+		return fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/?include_subtasks=%t",
+			t.TaskID, t.Subtasks)
+	} else {
+		return fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/?custom_task_ids=%t&team_id=%s&include_subtasks=%t",
+			t.TaskID, t.CustomTask, t.TeamID, t.Subtasks)
 	}
-
-	defer resp.Body.Close()
-	resp_body, _ := ioutil.ReadAll(resp.Body)
-
-	return resp_body
 }

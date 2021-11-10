@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -11,29 +13,33 @@ import (
 )
 
 var taskCmd = &cobra.Command{
-	Use:   "task",
-	Short: "Get data for a single task",
+	Use:   "task TASK_ID [-f]",
+	Short: "get data for a single task by supplying it's task id",
 	Long:  `Request JSON data for a single task in an authorized Clickup workspace`,
-	Run: func(cmd *cobra.Command, args []string) {
-		clientID := viper.GetString("client_id")
-		token := viper.GetString("ctoken")
-		fileFlag, _ := cmd.Flags().GetBool("file")
-
+	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
-			fmt.Fprintln(os.Stderr, "Incorrect arguments, usage: clickup get task 123456")
+			return errors.New("incorrect number of arguments")
 		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		customFlag, _ := cmd.Flags().GetBool("custom")
+		subtasksFlag, _ := cmd.Flags().GetBool("subtasks")
+		var t = internal.TaskRequest{
+			TaskID:     strings.Trim(args[0], "#"),
+			CustomTask: customFlag,
+			TeamID:     viper.GetString("team_id"),
+			Subtasks:   subtasksFlag,
+		}
+		data := internal.GetJSON(t)
 
-		taskID := strings.Replace(strings.Join(args, ","), "#", "", -1)
-
+		fileFlag, _ := cmd.Flags().GetBool("file")
 		if !fileFlag {
-			fmt.Println(string(internal.GetTask(taskID, token, clientID)))
-			return
+			fmt.Println(string(data))
 		} else {
-			filenm := "clickup_" + taskID + ".json"
-			data := internal.GetTask(taskID, token, clientID)
-			err := os.WriteFile(filenm, data, 0644)
+			err := os.WriteFile("clickup_"+t.TaskID+".json", data, 0644)
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error writing task JSON")
+				log.Fatalln("Error writing task JSON")
 			}
 		}
 	},
@@ -41,6 +47,7 @@ var taskCmd = &cobra.Command{
 
 func init() {
 	getCmd.AddCommand(taskCmd)
-
 	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
+	taskCmd.Flags().BoolP("custom", "c", false, "task id provided is a clickup custom task id")
+	taskCmd.Flags().BoolP("subtasks", "s", false, "include subtasks in output")
 }
