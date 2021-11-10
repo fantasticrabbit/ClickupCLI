@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,12 +11,12 @@ import (
 //Requester interface needs an API path to request JSON data
 type Requester interface {
 	BuildPath() string
+	GetJSON(string) []byte
 	WriteOut([]byte)
 }
 
 //Gets JSON data for any struct that implements Requester interface
-func GetJSON(r Requester) {
-	apiPath := r.BuildPath()
+func getJSON(apiPath string) []byte {
 	token := viper.GetString("ctoken")
 	client := &http.Client{}
 
@@ -32,10 +31,13 @@ func GetJSON(r Requester) {
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 
-	fileFlag := viper.GetBool("file")
-	if !fileFlag {
-		fmt.Println(string(resp_body))
-	} else {
-		r.WriteOut(resp_body)
-	}
+	return resp_body
+	//	fileFlag := viper.GetBool("file")
+	//	if !fileFlag {
+	//		fmt.Println(string(resp_body))
+	//	}
+}
+
+func (t TaskRequest) GetJSON(apiPath string) []byte {
+	return getJSON(apiPath)
 }

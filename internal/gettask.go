@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/spf13/viper"
 )
 
 type TaskRequest struct {
@@ -25,6 +27,9 @@ func (t TaskRequest) BuildPath() string {
 }
 
 func (t TaskRequest) WriteOut(payload []byte) {
+	if !viper.GetBool("file") {
+		fmt.Println(string(payload))
+	}
 	err := os.WriteFile("clickup_"+t.TaskID+".json", payload, 0644)
 	if err != nil {
 		log.Fatalln("Error writing task JSON")
