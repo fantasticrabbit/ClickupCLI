@@ -23,16 +23,16 @@ var taskCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-
 		customFlag, _ := cmd.Flags().GetBool("custom")
-
+		subtasksFlag, _ := cmd.Flags().GetBool("subtasks")
 		var t = internal.TaskRequest{
 			TaskID:     strings.Trim(args[0], "#"),
 			CustomTask: customFlag,
 			TeamID:     viper.GetString("team_id"),
+			Subtasks:   subtasksFlag,
 		}
-
 		data := internal.GetJSON(t)
+
 		fileFlag, _ := cmd.Flags().GetBool("file")
 		if !fileFlag {
 			fmt.Println(string(data))
@@ -49,4 +49,5 @@ func init() {
 	getCmd.AddCommand(taskCmd)
 	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
 	taskCmd.Flags().BoolP("custom", "c", false, "task id provided is a clickup custom task id")
+	taskCmd.Flags().BoolP("subtasks", "s", false, "include subtasks in output")
 }
