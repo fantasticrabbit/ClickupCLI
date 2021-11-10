@@ -12,7 +12,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// accepts a client ID, client secret, and localhost port, and implements
+// GetToken retrieves client ID, client secret, and localhost port, and implements
 // webserver to allow end-user to authenticate, returning authorization token
 func GetToken() (string, error) {
 	// Check for required config keys:

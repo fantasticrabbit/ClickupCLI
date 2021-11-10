@@ -15,7 +15,7 @@ type TaskRequest struct {
 	Subtasks   bool
 }
 
-//Builds the API path for a Clickup task request
+//BuildPath creates the API path for a task request
 func (t TaskRequest) BuildPath() string {
 	if !t.CustomTask {
 		return fmt.Sprintf("https://api.clickup.com/api/v2/task/%s/?include_subtasks=%t",
@@ -26,6 +26,7 @@ func (t TaskRequest) BuildPath() string {
 	}
 }
 
+//WriteOut reads the fileout Flag and writes to StdOut or file
 func (t TaskRequest) WriteOut(payload []byte) {
 	if !viper.GetBool("file") {
 		fmt.Println(string(payload))
@@ -34,4 +35,9 @@ func (t TaskRequest) WriteOut(payload []byte) {
 	if err != nil {
 		log.Fatalln("Error writing task JSON")
 	}
+}
+
+//GetJSON accepts an API path and returns byte payload of JSON data
+func (t TaskRequest) GetJSON(apiPath string) []byte {
+	return getJSON(apiPath)
 }
