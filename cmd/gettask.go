@@ -29,7 +29,6 @@ var taskCmd = &cobra.Command{
 			Subtasks:   subtasksFlag,
 		}
 		t.WriteOut(t.GetJSON(t.BuildPath()))
-
 	},
 }
 
@@ -38,5 +37,4 @@ func init() {
 	taskCmd.Flags().BoolP("custom", "c", false, "task id provided is a clickup custom task id")
 	taskCmd.Flags().BoolP("subtasks", "s", false, "include subtasks in output")
 	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
-
 }

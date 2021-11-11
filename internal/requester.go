@@ -8,6 +8,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	Client HTTPClient
+)
+
 //Requester interface needs an API path to request JSON data
 type Requester interface {
 	BuildPath() string
@@ -15,29 +19,27 @@ type Requester interface {
 	WriteOut([]byte)
 }
 
+// HTTPClient interface
+type HTTPClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+func init() {
+	Client = &http.Client{}
+}
+
 //Gets JSON data for any struct that implements Requester interface
 func getJSON(apiPath string) []byte {
 	token := viper.GetString("ctoken")
-	client := &http.Client{}
-
 	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
 
 	req.Header.Add("Authorization", token)
 	req.Header.Add("Content-Type", "application/json")
-	resp, err := client.Do(req)
+	resp, err := Client.Do(req)
 	if err != nil {
 		log.Fatalln("Errored when sending request to the server")
 	}
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
-
 	return resp_body
-	//	fileFlag := viper.GetBool("file")
-	//	if !fileFlag {
-	//		fmt.Println(string(resp_body))
-	//	}
-}
-
-func (t TaskRequest) GetJSON(apiPath string) []byte {
-	return getJSON(apiPath)
 }
