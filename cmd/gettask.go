@@ -30,7 +30,7 @@ var taskCmd = &cobra.Command{
 		var t = internal.TaskRequest{
 			TaskID:     strings.Trim(args[0], "#"),
 			CustomTask: viper.GetBool("custom"),
-			TeamID:     viper.GetString("team_id"),
+			TeamID:     viper.GetString("team"),
 			Subtasks:   viper.GetBool("subtasks"),
 		}
 		fmt.Println(string(t.GetJSON(t.BuildPath())))
