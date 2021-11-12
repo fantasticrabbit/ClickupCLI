@@ -23,6 +23,7 @@ var rootCmd = &cobra.Command{
 	build tools, and send and receive data from your Clickup space.`,
 	Run: func(cmd *cobra.Command, args []string) {
 	},
+	Version: "v0.1.7",
 }
 
 func Execute() {
