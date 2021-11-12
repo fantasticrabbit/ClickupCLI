@@ -14,7 +14,7 @@ var logoutCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleted authentication token")
 		viper.Set("ctoken", "")
-		viper.WriteConfigAs(home + "/.clickup/config.yaml")
+		viper.WriteConfigAs(config_file)
 	},
 }
 

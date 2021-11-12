@@ -10,8 +10,10 @@ import (
 )
 
 var (
-	cfgFile string
-	home, _ = os.UserHomeDir()
+	cfgFile     string
+	home, _     = os.UserHomeDir()
+	config_path = (home + "/.clickup")
+	config_file = (home + "/.clickup/config.yaml")
 )
 
 var rootCmd = &cobra.Command{
@@ -29,24 +31,22 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.clickup/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: "+config_file+")")
 }
 
 // initConfig reads in config file, ENV variables if set, and determines authentication steps
 func initConfig() {
 	if cfgFile != "" {
-		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Set config in home/.clickup/config.yaml
-		_, err := os.Stat(home + "/.clickup")
+		_, err := os.Stat(config_path)
 		if os.IsNotExist(err) {
-			errDir := os.MkdirAll(home+"/.clickup", 0755)
+			errDir := os.MkdirAll(config_path, 0755)
 			if errDir != nil {
-				log.Fatalln("cannot create .clickup config folder:" + home + "/.clickup")
+				log.Fatalln("cannot create .clickup config folder:" + config_path)
 			}
 		}
-		viper.SetConfigFile(home + "/.clickup/config.yaml")
+		viper.SetConfigFile(config_file)
 	}
 
 	viper.SetEnvPrefix("CLICKUP")
@@ -63,6 +63,6 @@ func initConfig() {
 			log.Fatalln("auth failed")
 		}
 		viper.Set("cToken", token)
-		viper.WriteConfigAs(home + "/.clickup/config.yaml")
+		viper.WriteConfigAs(config_file)
 	}
 }
