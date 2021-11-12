@@ -22,7 +22,6 @@ func GetToken() (string, error) {
 	if !(viper.IsSet("client_secret")) {
 		log.Fatalln("No Client Secret provided, check configuration")
 	}
-	viper.SetDefault("port", "4321")
 
 	ctx := context.Background()
 	redirectURL := "http://localhost:" + viper.GetString("port")
