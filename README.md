@@ -25,11 +25,6 @@ export CLICKUP_REDIRECT_PORT=9999  (optional, CLI will default to port 4321, jus
     ```
     
 1. Task details will be output in JSON to StdOut. 
-1. You can use the -f flag to output to a file `clickup_<taskid>.json`:
-    ```
-    clickup get task 123456 -f         <short>
-    clickup get task 123456 --file     <long/explicit>
-    ```
 1. If Clickup space is using custom task IDs, set the `CLICKUP_TEAM_ID` env variable to your organization team ID, and pass the -c flag:
     ```
     clickup get task CUSTOM-1234 -c        <short>

@@ -16,7 +16,6 @@ var (
 type Requester interface {
 	BuildPath() string
 	GetJSON(string) []byte
-	WriteOut([]byte)
 }
 
 // HTTPClient interface

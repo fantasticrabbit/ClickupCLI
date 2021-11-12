@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
@@ -10,7 +11,7 @@ import (
 )
 
 var taskCmd = &cobra.Command{
-	Use:   "task TASK_ID [-f]",
+	Use:   "task TASK_ID",
 	Short: "get data for a single task by supplying it's task id",
 	Long:  `Request JSON data for a single task in an authorized Clickup workspace`,
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -20,21 +21,20 @@ var taskCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		customFlag, _ := cmd.Flags().GetBool("custom")
-		subtasksFlag, _ := cmd.Flags().GetBool("subtasks")
 		var t = internal.TaskRequest{
 			TaskID:     strings.Trim(args[0], "#"),
-			CustomTask: customFlag,
+			CustomTask: viper.GetBool("custom"),
 			TeamID:     viper.GetString("team_id"),
-			Subtasks:   subtasksFlag,
+			Subtasks:   viper.GetBool("subtasks"),
 		}
-		t.WriteOut(t.GetJSON(t.BuildPath()))
+		fmt.Println(t.GetJSON(t.BuildPath()))
 	},
 }
 
 func init() {
 	getCmd.AddCommand(taskCmd)
 	taskCmd.Flags().BoolP("custom", "c", false, "task id provided is a clickup custom task id")
+	viper.BindPFlag("custom", taskCmd.Flags().Lookup("custom"))
 	taskCmd.Flags().BoolP("subtasks", "s", false, "include subtasks in output")
-	taskCmd.Flags().BoolP("file", "f", false, "output to file clickup_<taskID>.json")
+	viper.BindPFlag("subtasks", taskCmd.Flags().Lookup("subtasks"))
 }
