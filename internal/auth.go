@@ -22,10 +22,10 @@ func GetToken() (string, error) {
 	if !(viper.IsSet("client_secret")) {
 		log.Fatalln("No Client Secret provided, check configuration")
 	}
-	viper.SetDefault("redirect_port", "4321")
+	viper.SetDefault("port", "4321")
 
 	ctx := context.Background()
-	redirectURL := "http://localhost:" + viper.GetString("redirect_port")
+	redirectURL := "http://localhost:" + viper.GetString("port")
 
 	conf := &oauth2.Config{
 		ClientID:     viper.GetString("client_id"),
@@ -61,7 +61,7 @@ func GetToken() (string, error) {
 		log.Fatalln("failed to open browser for authentication", err)
 	}
 
-	server := &http.Server{Addr: ":" + viper.GetString("redirect_port")}
+	server := &http.Server{Addr: ":" + viper.GetString("port")}
 
 	go func() {
 		okToClose := <-messages

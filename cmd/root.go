@@ -58,6 +58,10 @@ func initConfig() {
 		viper.ReadInConfig()
 	}
 
+	viper.SetDefault("port", "4321")
+}
+
+func checkToken() {
 	if !viper.InConfig("ctoken") || viper.GetString("ctoken") == "" {
 		token, err := internal.GetToken()
 		if err != nil {

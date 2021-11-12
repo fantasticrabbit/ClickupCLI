@@ -20,6 +20,9 @@ var taskCmd = &cobra.Command{
 		}
 		return nil
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		checkToken()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		viper.BindPFlag("custom", cmd.Flags().Lookup("custom"))
 		viper.BindPFlag("subtasks", cmd.Flags().Lookup("subtasks"))

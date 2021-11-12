@@ -8,9 +8,7 @@ var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "gets JSON from Clickup",
 	Long:  `get retrieves data in JSON format from the Clickup API`,
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
+	Run:   func(cmd *cobra.Command, args []string) {},
 }
 
 func init() {
