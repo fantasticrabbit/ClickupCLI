@@ -10,7 +10,7 @@ export CLICKUP_CLIENT_SECRET=xxx
 export CLICKUP_PORT=9999
 ```
 
-## SET command
+### SET command
 
 1. You can optionally set the local host port with the set command:
 ```
@@ -21,6 +21,8 @@ clickup set --port=1234
 clickup set --team=1234567
 ```
 1. Both parameters can be set in the same command, or provided as environment variables with the "CLICKUP_" prefix.
+
+1. You can additionally set the token manually (--token), to use a personal token or for environments without a browser
 
 ## Usage  
 
