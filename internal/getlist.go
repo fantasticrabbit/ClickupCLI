@@ -2,9 +2,8 @@ package internal
 
 import (
 	"fmt"
+	"net/url"
 )
-
-var noflags bool
 
 type ListRequest struct {
 	ListID          string
@@ -31,24 +30,25 @@ func (l ListRequest) BuildPath() string {
 
 	switch {
 	case noflags:
-		return fmt.Sprintf("https://api.clickup.com/api/v2/list/%s/", l.ListID)
+		return fmt.Sprintf("%s/list/%s/", prodAPIbaseV2, l.ListID)
 	default:
-		return fmt.Sprintf("https://api.clickup.com/api/v2/list/%s/?task"+
+		return url.PathEscape(fmt.Sprintf("%s/list/%s/?task"+
 			"?archived=%t"+
 			"&page=%d"+
 			"&order_by=%s"+
 			"&reverse=%t"+
 			"&subtasks=%t"+
-			"&statuses%5B%5D=%v"+
+			"&statuses[]=%v"+
 			"&include_closed=%t"+
-			"&assignees%5B%5D=%v"+
+			"&assignees[]=%v"+
 			"&due_date_gt=%d"+
 			"&due_date_lt=%d"+
 			"&date_created_gt=%d"+
 			"&date_created_lt=%d"+
 			"&date_updated_gt=%d"+
 			"&date_updated_lt=%d"+
-			"&custom_fields%5B%5D=%v",
+			"&custom_fields[]=%v",
+			prodAPIbaseV2,
 			l.ListID,
 			l.Archived,
 			l.Page,
@@ -64,7 +64,7 @@ func (l ListRequest) BuildPath() string {
 			l.Date_Created_lt,
 			l.Date_Updated_gt,
 			l.Date_Updated_lt,
-			l.CustomFields)
+			l.CustomFields))
 	}
 }
 
