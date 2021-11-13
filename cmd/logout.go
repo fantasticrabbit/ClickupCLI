@@ -13,7 +13,7 @@ var logoutCmd = &cobra.Command{
 	Long:  `logout allows the user to delete the access token for accessing a Clickup workspace`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleted authentication token")
-		viper.Set("ctoken", "")
+		viper.Set("token", "")
 		viper.WriteConfigAs(config_file)
 	},
 }

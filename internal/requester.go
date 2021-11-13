@@ -29,10 +29,8 @@ func init() {
 
 //Gets JSON data for any struct that implements Requester interface
 func getJSON(apiPath string) []byte {
-	token := viper.GetString("ctoken")
 	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
-
-	req.Header.Add("Authorization", token)
+	req.Header.Add("Authorization", viper.GetString("token"))
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := Client.Do(req)
 	if err != nil {
