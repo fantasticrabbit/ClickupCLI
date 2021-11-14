@@ -20,7 +20,7 @@ var setCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		keys := []string{"team", "port"}
+		keys := []string{"team", "port", "token"}
 		for _, key := range keys {
 			x, _ := cmd.Flags().GetString(key)
 			if x != "" {
@@ -37,4 +37,5 @@ func init() {
 	rootCmd.AddCommand(setCmd)
 	setCmd.Flags().StringP("team", "", "", "set the Team ID")
 	setCmd.Flags().StringP("port", "", "", "set the Redirect URL Port number")
+	setCmd.Flags().StringP("token", "", "", "set the Auth Token manually")
 }
