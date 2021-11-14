@@ -69,6 +69,6 @@ func (l ListRequest) BuildPath() string {
 }
 
 //GetJSON accepts an API path and returns byte payload of JSON data
-func (t ListRequest) GetJSON(apiPath string) []byte {
+func (t ListRequest) GetJSON(apiPath string) string {
 	return getJSON(apiPath)
 }

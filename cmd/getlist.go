@@ -30,7 +30,7 @@ var listCmd = &cobra.Command{
 			ListID:   string(args[0]),
 			Subtasks: viper.GetBool("subtasks"),
 		}
-		fmt.Println(string(l.GetJSON(l.BuildPath())))
+		fmt.Println(internal.FormatJSON(l.GetJSON(l.BuildPath())))
 	},
 }
 
