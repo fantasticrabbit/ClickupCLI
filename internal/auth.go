@@ -12,6 +12,13 @@ import (
 	"golang.org/x/oauth2"
 )
 
+const (
+	prodAPIbase   = "https://app.clickup.com/api"
+	prodAPIbaseV2 = "https://app.clickup.com/api/v2"
+	testAPIbase   = "https://localhost/api"
+	testAPIbaseV2 = "https://localhost/api/v2"
+)
+
 // GetToken retrieves client ID, client secret, and localhost port, and implements
 // webserver to allow end-user to authenticate, returning authorization token
 func GetToken() (string, error) {
@@ -31,8 +38,8 @@ func GetToken() (string, error) {
 		ClientSecret: viper.GetString("client_secret"),
 		RedirectURL:  redirectURL,
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://app.clickup.com/api",
-			TokenURL: "https://app.clickup.com/api/v2/oauth/token",
+			AuthURL:  prodAPIbase,
+			TokenURL: prodAPIbaseV2 + "/oauth/token",
 		},
 	}
 

@@ -30,7 +30,7 @@ func init() {
 }
 
 //Gets JSON data for any struct that implements Requester interface
-func getJSON(apiPath string) []byte {
+func getJSON(apiPath string) string {
 	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
 	req.Header.Add("Authorization", viper.GetString("token"))
 	req.Header.Add("Content-Type", "application/json")
@@ -40,13 +40,13 @@ func getJSON(apiPath string) []byte {
 	}
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
-	return resp_body
+	return string(resp_body)
 }
 
-func FormatJSON(str string) (string, error) {
+func FormatJSON(str string) string {
 	var formattedJSON bytes.Buffer
 	if err := json.Indent(&formattedJSON, []byte(str), "", "    "); err != nil {
-		return "", err
+		log.Fatalln(err)
 	}
-	return formattedJSON.String(), nil
+	return formattedJSON.String()
 }

@@ -13,13 +13,13 @@ export CLICKUP_PORT=9999
 ### SET command
 
 1. You can optionally set the local host port with the set command:
-```
-clickup set --port=1234
-```
-1. If your space is using custom Task ID's, you will need to set the Team ID. Grab this code from your Clickup web app URL, the first parameter after "https://app.clickup.com/1234567/...". 
-```
-clickup set --team=1234567
-```
+    ```
+    clickup set --port=1234
+    ```
+1. If your space is using custom Task ID's, you will need to set the Team ID. Grab this code from your Clickup web app URL, for example, "https://app.clickup.com/1234567/...". 
+    ```
+    clickup set --team=1234567
+    ```
 1. Both parameters can be set in the same command, or provided as environment variables with the "CLICKUP_" prefix.
 
 1. You can additionally set the token manually (--token), to use a personal token or for environments without a browser
@@ -55,3 +55,11 @@ clickup set --team=1234567
     clickup get task 123456 -s
     clickup get task 123456 --subtasks
     ```
+
+### Get List
+1. From the Clickup app, copy the List ID for the list you'd like to retrieve (e.g. `1234`).  
+1. Provide the list ID as command line argument:
+    ```
+    clickup get list 1234
+    ```
+1. List details will be output in JSON to StdOut.

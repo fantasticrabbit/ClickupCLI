@@ -23,7 +23,7 @@ func TestGetJSON(t *testing.T) {
 			Body:       r,
 		}, nil
 	}
-	request := getJSON("http://localhost/testpath")
+	request := getJSON(testAPIbaseV2)
 	assert.NotNil(t, request)
 	assert.EqualValues(t, json, request)
 }
