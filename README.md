@@ -55,3 +55,11 @@ export CLICKUP_PORT=9999
     clickup get task 123456 -s
     clickup get task 123456 --subtasks
     ```
+
+### Get List
+1. From the Clickup app, copy the List ID for the list you'd like to retrieve (e.g. `1234`).  
+1. Provide the list ID as command line argument:
+    ```
+    clickup get list 1234
+    ```
+1. List details will be output in JSON to StdOut.
