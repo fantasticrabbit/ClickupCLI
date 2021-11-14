@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
@@ -33,7 +34,11 @@ var taskCmd = &cobra.Command{
 			TeamID:     viper.GetString("team"),
 			Subtasks:   viper.GetBool("subtasks"),
 		}
-		fmt.Println(string(t.GetJSON(t.BuildPath())))
+		x, err := internal.FormatJSON(string(t.GetJSON(t.BuildPath())))
+		if err != nil {
+			log.Fatalln(err)
+		}
+		fmt.Println(x, err)
 	},
 }
 

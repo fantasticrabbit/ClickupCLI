@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -39,4 +41,12 @@ func getJSON(apiPath string) []byte {
 	defer resp.Body.Close()
 	resp_body, _ := ioutil.ReadAll(resp.Body)
 	return resp_body
+}
+
+func FormatJSON(str string) (string, error) {
+	var formattedJSON bytes.Buffer
+	if err := json.Indent(&formattedJSON, []byte(str), "", "    "); err != nil {
+		return "", err
+	}
+	return formattedJSON.String(), nil
 }
