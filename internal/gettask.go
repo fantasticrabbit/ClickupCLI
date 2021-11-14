@@ -14,7 +14,7 @@ type TaskRequest struct {
 //BuildPath creates the API path for a task request
 func (t TaskRequest) BuildPath() string {
 	if !t.CustomTask {
-		return fmt.Sprintf("%stask/%s/?include_subtasks=%t",
+		return fmt.Sprintf("%s/task/%s/?include_subtasks=%t",
 			prodAPIbaseV2, t.TaskID, t.Subtasks)
 	} else {
 		return fmt.Sprintf("%s/task/%s/?custom_task_ids=%t&team_id=%s&include_subtasks=%t",
