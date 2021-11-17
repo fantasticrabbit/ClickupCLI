@@ -65,7 +65,7 @@ func checkToken() {
 	if !viper.InConfig("token") || viper.GetString("token") == "" {
 		token, err := internal.GetToken()
 		if err != nil {
-			log.Fatalln("auth failed")
+			log.Fatalln("auth failed", err)
 		}
 		viper.Set("Token", token)
 		viper.WriteConfigAs(config_file)
