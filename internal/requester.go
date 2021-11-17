@@ -3,6 +3,7 @@ package internal
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -49,4 +50,8 @@ func FormatJSON(jsonresp []byte) string {
 		log.Fatalln(err)
 	}
 	return formattedJSON.String()
+}
+
+func Request(r Requester) {
+	fmt.Println(FormatJSON(r.GetJSON(r.BuildPath())))
 }

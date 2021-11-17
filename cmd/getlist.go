@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
@@ -47,7 +46,7 @@ var listCmd = &cobra.Command{
 			l.ListID = args[0]
 		}
 
-		fmt.Println(internal.FormatJSON(l.GetJSON(l.BuildPath())))
+		internal.Request(l)
 	},
 }
 
