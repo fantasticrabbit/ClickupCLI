@@ -7,6 +7,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+// add new config options here with the flag command and help
+// message for the setting. only string flags allowed
+var configOptions = map[string]string{
+	"team":  "set the Team ID",
+	"port":  "set the Redirect URL Port number",
+	"token": "set the Auth Token manually",
+}
+
 // setCmd represents the set command
 var setCmd = &cobra.Command{
 	Use:   "set",
@@ -20,13 +28,12 @@ var setCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		keys := []string{"team", "port", "token"}
-		for _, key := range keys {
-			x, _ := cmd.Flags().GetString(key)
-			if x != "" {
-				viper.BindPFlag(key, cmd.Flags().Lookup(key))
+		for flag := range configOptions {
+			value, _ := cmd.Flags().GetString(flag)
+			if value != "" {
+				viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
 				viper.WriteConfigAs(config_file)
-				println("Saved", key, "in config file")
+				println("Saved", flag, "in config file")
 			}
 		}
 
@@ -35,7 +42,7 @@ var setCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(setCmd)
-	setCmd.Flags().StringP("team", "", "", "set the Team ID")
-	setCmd.Flags().StringP("port", "", "", "set the Redirect URL Port number")
-	setCmd.Flags().StringP("token", "", "", "set the Auth Token manually")
+	for flag, description := range configOptions {
+		setCmd.Flags().StringP(flag, "", "", description)
+	}
 }
