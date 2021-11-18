@@ -23,7 +23,7 @@ var listsCmd = &cobra.Command{
 		checkToken()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		viper.BindPFlag("archived", listsCmd.Flags().Lookup("archived"))
+		viper.BindPFlag("archived", listCmd.Flags().Lookup("archived"))
 		l := internal.ListRequest{
 			FolderID: strings.Trim(args[0], " "),
 			Archived: viper.GetBool("archived"),
