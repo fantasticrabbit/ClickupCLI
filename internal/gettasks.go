@@ -8,19 +8,19 @@ import (
 type TaskListRequest struct {
 	ListID          string
 	Archived        bool
-	Page            int
-	Order_By        string
+	Page            int    // starts at 0, 100 per page
+	Order_By        string // defaults to created date, else: id, updated, due_date
 	Reverse         bool
 	Subtasks        bool
 	Statuses        []string
 	Include_Closed  bool
-	Assignees       []string
-	Due_Date_gt     int
-	Due_Date_lt     int
-	Date_Created_gt int
-	Date_Created_lt int
-	Date_Updated_gt int
-	Date_Updated_lt int
+	Assignees       []string // need numberic ID's
+	Due_Date_gt     int      // UNIX time in ms
+	Due_Date_lt     int      // UNIX time in ms
+	Date_Created_gt int      // UNIX time in ms
+	Date_Created_lt int      // UNIX time in ms
+	Date_Updated_gt int      // UNIX time in ms
+	Date_Updated_lt int      // UNIX time in ms
 	CustomFields    string
 }
 
@@ -32,7 +32,7 @@ func (tl TaskListRequest) BuildPath() string {
 	case noflags:
 		return fmt.Sprintf("%s/list/%s/task?", prodAPIbaseV2, tl.ListID)
 	default:
-		return url.PathEscape(fmt.Sprintf("%s/list/%s/task?"+
+		return url.PathEscape(fmt.Sprintf("%s/list/%s/task"+
 			"?archived=%t"+
 			"&page=%d"+
 			"&order_by=%s"+
