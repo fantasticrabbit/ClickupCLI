@@ -2,10 +2,12 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 //
@@ -18,11 +20,12 @@ var taskArrayFlags = map[string]string{
 }
 var taskBoolFlags = map[string]string{
 	"archived":       "display active or archived tasks (bool)",
-	"reversed":       "reverse the sort order (bool)",
+	"reverse":        "reverse the sort order (bool)",
 	"subtasks":       "output subtasks (bool)",
-	"include_closed": "include closed tasks (bool)",
+	"include-closed": "include closed tasks (bool)",
 }
 var taskIntFlags = map[string]string{
+	"page":            "page numeber for lists of more than 100 tasks",
 	"due_date_gt":     "filter for due date greater than supplied value",
 	"due_date_lt":     "filter for due date less than supplied value",
 	"date_created_gt": "filter for created date greater than supplied value",
@@ -30,6 +33,8 @@ var taskIntFlags = map[string]string{
 	"date_updated_gt": "filter for updated date greater than supplied value",
 	"date_updated_lt": "filter for updated date less than supplied value",
 }
+
+var AllFlags = make(map[string]string)
 
 var tasksCmd = &cobra.Command{
 	Use:   "tasks LIST_ID",
@@ -50,26 +55,58 @@ var tasksCmd = &cobra.Command{
 		var tl = internal.TaskListRequest{
 			ListID: strings.Trim(args[0], " "),
 		}
-		//use reflect to get the flag type, use switch case to get flag and add to struct? or just
+		for flag := range AllFlags {
+			flagtype := cmd.Flags().Lookup(flag).Value.Type()
+			fmt.Println(flagtype) //debugging
+			switch {
+			case flagtype == "string":
+				if x, _ := cmd.Flags().GetString(flag); x != "" {
+					viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
+					fmt.Println("set", flagtype, "flag", flag) //debugging
+				}
+			case flagtype == "bool":
+				if x, _ := cmd.Flags().GetBool(flag); x {
+					viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
+					fmt.Println("set", flagtype, "flag", flag) //debugging
+				}
+			case flagtype == "int":
+				if x, _ := cmd.Flags().GetInt(flag); x != 0 {
+					viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
+					fmt.Println("set", flagtype, "flag", flag) //debugging
+				}
+			case flagtype == "stringSlice":
+				if x, _ := cmd.Flags().GetStringSlice(flag); len(x) > 0 {
+					viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
+					fmt.Println("set", flagtype, "flag", flag) //debugging
+				}
+			default:
+				fmt.Println("did nothing", flag, flagtype)
+			}
 
+		}
+
+		fmt.Println(tl.BuildPath()) //debugging
 		internal.Request(tl)
 	},
 }
 
 func init() {
 	getCmd.AddCommand(tasksCmd)
+
 	for flag, description := range taskStringFlags {
-		tasksCmd.Flags().StringP(flag, "", "", description)
+		tasksCmd.Flags().String(flag, "", description)
+		AllFlags[flag] = description
 	}
 	for flag, description := range taskBoolFlags {
-		tasksCmd.Flags().BoolP(flag, "", false, description)
+		tasksCmd.Flags().Bool(flag, false, description)
+		AllFlags[flag] = description
 	}
 	for flag, description := range taskArrayFlags {
-		tasksCmd.Flags().StringArrayP(flag, "", nil, description)
+		tasksCmd.Flags().StringSlice(flag, nil, description)
+		AllFlags[flag] = description
 	}
-
 	for flag, description := range taskIntFlags {
-		tasksCmd.Flags().IntP(flag, "", 0, description)
+		tasksCmd.Flags().Int(flag, 0, description)
+		AllFlags[flag] = description
 	}
-
 }
