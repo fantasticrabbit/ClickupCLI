@@ -15,7 +15,7 @@ var listsCmd = &cobra.Command{
 	Long:  `Request JSON data for all lists by folder ID`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
-			return errors.New("incorrect number of arguments")
+			return errors.New("requires the folder-id argument")
 		}
 		return nil
 	},
