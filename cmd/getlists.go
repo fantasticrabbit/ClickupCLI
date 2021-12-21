@@ -10,7 +10,7 @@ import (
 )
 
 var listsCmd = &cobra.Command{
-	Use:   "lists FOLDERID [-a]",
+	Use:   "lists FOLDERID",
 	Short: "get data for lists in a folder",
 	Long:  `Request JSON data for all lists by folder ID`,
 	Args: func(cmd *cobra.Command, args []string) error {
