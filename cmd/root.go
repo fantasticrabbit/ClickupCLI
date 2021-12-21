@@ -40,9 +40,9 @@ func initConfig() {
 	} else {
 		_, err := os.Stat(config_path)
 		if os.IsNotExist(err) {
-			errDir := os.MkdirAll(config_path, 0755)
-			if errDir != nil {
-				log.Fatalln("cannot create .clickup config folder:" + config_path)
+			err := os.MkdirAll(config_path, 0755)
+			if err != nil {
+				log.Fatalf("cannot create %s: %v", config_path, err)
 			}
 		}
 		viper.SetConfigFile(config_file)
