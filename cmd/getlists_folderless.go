@@ -10,7 +10,7 @@ import (
 )
 
 var flessListsCmd = &cobra.Command{
-	Use:   "folderless-lists SPACEID [-a]",
+	Use:   "folderless-lists SPACEID",
 	Short: "get data for lists in a workspace not in a folder",
 	Long: `Request JSON data for all folderless lists 
 	by workspace ID`,
