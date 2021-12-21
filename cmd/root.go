@@ -3,6 +3,7 @@ package cmd
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
@@ -12,8 +13,8 @@ import (
 var (
 	cfgFile     string
 	home, _     = os.UserHomeDir()
-	config_path = (home + "/.clickup")
-	config_file = (home + "/.clickup/config.yaml")
+	config_path = filepath.Join(home, ".clickup")
+	config_file = filepath.Join(home, ".clickup", "config.yaml")
 )
 
 var rootCmd = &cobra.Command{
@@ -21,9 +22,6 @@ var rootCmd = &cobra.Command{
 	Short: "ClickupCLI allows access to ClickUp from the command line",
 	Long: `ClickupCLI allows you to use data from Clickup to drive scripts,
 	build tools, and send and receive data from your Clickup space.`,
-	Run: func(cmd *cobra.Command, args []string) {
-	},
-	Version: "v0.1.7",
 }
 
 func Execute() {
@@ -35,7 +33,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: "+config_file+")")
 }
 
-// initConfig reads in config file, ENV variables if set, and determines authentication steps
+// initConfig reads in config file, ENV variables if set, and determines authentication steps.
 func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
