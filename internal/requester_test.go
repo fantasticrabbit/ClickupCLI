@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const testAPIbaseV2 = "https://localhost/api/v2"
+
 func init() {
 	Client = &mocks.MockClient{}
 }

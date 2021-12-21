@@ -15,8 +15,6 @@ import (
 const (
 	prodAPIbase   = "https://app.clickup.com/api"
 	prodAPIbaseV2 = "https://app.clickup.com/api/v2"
-	testAPIbase   = "https://localhost/api"
-	testAPIbaseV2 = "https://localhost/api/v2"
 )
 
 // GetToken retrieves client ID, client secret, and localhost port, and implements
