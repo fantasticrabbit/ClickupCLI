@@ -15,7 +15,7 @@ var logoutCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleted authentication token")
 		viper.Set("token", "")
-		viper.WriteConfigAs(utils.GetConfigFile)
+		viper.WriteConfigAs(utils.GetConfigFile())
 	},
 }
 

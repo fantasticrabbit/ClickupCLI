@@ -22,7 +22,7 @@ var flessListsCmd = &cobra.Command{
 		return nil
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		if authed := internal.CheckToken(); authed == false {
+		if authed := internal.CheckToken(); !authed {
 			internal.SaveToken(internal.GetToken())
 		}
 	},
