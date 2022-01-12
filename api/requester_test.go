@@ -1,4 +1,4 @@
-package internal
+package api
 
 import (
 	"bytes"
@@ -11,10 +11,6 @@ import (
 )
 
 const testAPIbaseV2 = "https://localhost/api/v2"
-
-func init() {
-	Client = &mocks.MockClient{}
-}
 
 func TestGetJSON(t *testing.T) {
 	json := `{"name":"Test Name","full_name":"test full name","owner":{"login": "admin"}}`

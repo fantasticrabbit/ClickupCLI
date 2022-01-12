@@ -1,4 +1,4 @@
-package internal
+package api
 
 import (
 	"fmt"
@@ -6,11 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/fantasticrabbit/ClickupCLI/utils"
 	"github.com/spf13/viper"
-)
-
-var (
-	Client HTTPClient
 )
 
 //Requester interface needs an API path to request JSON data
@@ -24,16 +21,15 @@ type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-func init() {
-	Client = &http.Client{}
-}
-
 //Gets JSON data for any struct that implements Requester interface
 func getJSON(apiPath string) []byte {
 	req, _ := http.NewRequest(http.MethodGet, apiPath, nil)
 	req.Header.Add("Authorization", viper.GetString("token"))
 	req.Header.Add("Content-Type", "application/json")
-	resp, err := Client.Do(req)
+
+	var client HTTPClient
+	client = &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalln("Errored when sending request to the server")
 	}
@@ -43,5 +39,5 @@ func getJSON(apiPath string) []byte {
 }
 
 func Request(r Requester) {
-	fmt.Println(FormatJSON(r.GetJSON(r.BuildPath())))
+	fmt.Println(utils.FormatJSON(r.GetJSON(r.BuildPath())))
 }

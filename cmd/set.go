@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	"github.com/fantasticrabbit/ClickupCLI/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -32,7 +33,7 @@ var setCmd = &cobra.Command{
 			value, _ := cmd.Flags().GetString(flag)
 			if value != "" {
 				viper.BindPFlag(flag, cmd.Flags().Lookup(flag))
-				viper.WriteConfigAs(config_file)
+				viper.WriteConfigAs(utils.GetConfigFile())
 				println("Saved", flag, "in config file")
 			}
 		}

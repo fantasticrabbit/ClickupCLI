@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 func FormatJSON(jsonresp []byte) string {
@@ -12,4 +14,14 @@ func FormatJSON(jsonresp []byte) string {
 		log.Fatalln(err)
 	}
 	return formattedJSON.String()
+}
+
+func GetConfigPath() string {
+	home, _ := os.UserHomeDir()
+	return filepath.Join(home, ".clickup")
+}
+
+func GetConfigFile() string {
+	home, _ := os.UserHomeDir()
+	return filepath.Join(home, ".clickup", "config.yaml")
 }

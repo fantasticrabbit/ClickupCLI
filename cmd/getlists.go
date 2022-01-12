@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/fantasticrabbit/ClickupCLI/api"
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -20,15 +21,17 @@ var listsCmd = &cobra.Command{
 		return nil
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		checkToken()
+		if authed := internal.CheckToken(); authed == false {
+			internal.SaveToken(internal.GetToken())
+		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		viper.BindPFlag("archived", cmd.Flags().Lookup("archived"))
-		l := internal.ListRequest{
+		l := api.ListRequest{
 			FolderID: strings.Trim(args[0], " "),
 			Archived: viper.GetBool("archived"),
 		}
-		internal.Request(l)
+		api.Request(l)
 	},
 }
 

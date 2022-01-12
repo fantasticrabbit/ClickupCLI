@@ -1,7 +1,9 @@
-package internal
+package api
 
 import (
 	"fmt"
+
+	"github.com/fantasticrabbit/ClickupCLI/internal"
 )
 
 type ListRequest struct {
@@ -16,13 +18,13 @@ func (l ListRequest) BuildPath() string {
 	switch {
 
 	case l.FolderID != "":
-		return fmt.Sprintf("%s/folder/%s/list?archived=%t", prodAPIbaseV2, l.FolderID, l.Archived)
+		return fmt.Sprintf("%s/folder/%s/list?archived=%t", internal.ProdAPIbaseV2, l.FolderID, l.Archived)
 
 	case l.SpaceID != "":
-		return fmt.Sprintf("%s/space/%s/list?archived=%t", prodAPIbaseV2, l.SpaceID, l.Archived)
+		return fmt.Sprintf("%s/space/%s/list?archived=%t", internal.ProdAPIbaseV2, l.SpaceID, l.Archived)
 
 	default:
-		return fmt.Sprintf("%s/list/%s/", prodAPIbaseV2, l.ListID)
+		return fmt.Sprintf("%s/list/%s/", internal.ProdAPIbaseV2, l.ListID)
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/fantasticrabbit/ClickupCLI/api"
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -20,20 +21,22 @@ var taskCmd = &cobra.Command{
 		return nil
 	},
 	PreRun: func(cmd *cobra.Command, args []string) {
-		checkToken()
+		if authed := internal.CheckToken(); authed == false {
+			internal.SaveToken(internal.GetToken())
+		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		viper.BindPFlag("custom", cmd.Flags().Lookup("custom"))
 		viper.BindPFlag("subtasks", cmd.Flags().Lookup("subtasks"))
 
-		var t = internal.TaskRequest{
+		var t = api.TaskRequest{
 			TaskID:     strings.Trim(args[0], "#"),
 			CustomTask: viper.GetBool("custom"),
 			TeamID:     viper.GetString("team"),
 			Subtasks:   viper.GetBool("subtasks"),
 		}
 
-		internal.Request(t)
+		api.Request(t)
 	},
 }
 

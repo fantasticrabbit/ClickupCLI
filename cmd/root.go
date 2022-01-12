@@ -5,16 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	cfgFile     string
-	home, _     = os.UserHomeDir()
-	config_path = filepath.Join(home, ".clickup")
-	config_file = filepath.Join(home, ".clickup", "config.yaml")
+	cfgFile string
 )
 
 var rootCmd = &cobra.Command{
@@ -30,11 +26,17 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default: "+config_file+")")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "specify a config file")
 }
 
-// initConfig reads in config file, ENV variables if set, and determines authentication steps.
+// initConfig reads in config file and available ENV variables
 func initConfig() {
+	var (
+		home, _     = os.UserHomeDir()
+		config_path = filepath.Join(home, ".clickup")
+		config_file = filepath.Join(home, ".clickup", "config.yaml")
+	)
+
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
@@ -57,15 +59,4 @@ func initConfig() {
 	}
 
 	viper.SetDefault("port", "4321")
-}
-
-func checkToken() {
-	if !viper.InConfig("token") || viper.GetString("token") == "" {
-		token, err := internal.GetToken()
-		if err != nil {
-			log.Fatalln("auth failed", err)
-		}
-		viper.Set("Token", token)
-		viper.WriteConfigAs(config_file)
-	}
 }

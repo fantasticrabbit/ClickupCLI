@@ -7,19 +7,35 @@ import (
 	"math/rand"
 	"net/http"
 
+	"github.com/fantasticrabbit/ClickupCLI/utils"
 	"github.com/pkg/browser"
 	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 )
 
 const (
-	prodAPIbase   = "https://app.clickup.com/api"
-	prodAPIbaseV2 = "https://app.clickup.com/api/v2"
+	ProdAPIbase   = "https://app.clickup.com/api"
+	ProdAPIbaseV2 = "https://app.clickup.com/api/v2"
 )
+
+// CheckToken returns True if a user auth token is availalble, otherwise false
+func CheckToken() bool {
+	if !viper.InConfig("token") || viper.GetString("token") == "" {
+		return false
+	} else {
+		return true
+	}
+}
+
+// SaveToken saves the API Access Token to the config file for re-use
+func SaveToken(token string) {
+	viper.Set("token", token)
+	viper.WriteConfigAs(utils.GetConfigPath())
+}
 
 // GetToken retrieves client ID, client secret, and localhost port, and implements
 // webserver to allow end-user to authenticate, returning authorization token
-func GetToken() (string, error) {
+func GetToken() string {
 	// Check for required config keys:
 	if !(viper.IsSet("client_id")) {
 		log.Fatalln("No Client ID provided, check configuration")
@@ -36,8 +52,8 @@ func GetToken() (string, error) {
 		ClientSecret: viper.GetString("client_secret"),
 		RedirectURL:  redirectURL,
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  prodAPIbase,
-			TokenURL: prodAPIbaseV2 + "/oauth/token",
+			AuthURL:  ProdAPIbase,
+			TokenURL: ProdAPIbaseV2 + "/oauth/token",
 		},
 	}
 
@@ -83,6 +99,6 @@ func GetToken() (string, error) {
 		log.Fatalln(err)
 	}
 
-	return tok.AccessToken, err
+	return tok.AccessToken
 
 }

@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/fantasticrabbit/ClickupCLI/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -14,7 +15,7 @@ var logoutCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleted authentication token")
 		viper.Set("token", "")
-		viper.WriteConfigAs(config_file)
+		viper.WriteConfigAs(utils.GetConfigFile)
 	},
 }
 
