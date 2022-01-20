@@ -3,7 +3,7 @@ package cmd
 import (
 	"strings"
 
-	"github.com/fantasticrabbit/ClickupCLI/api"
+	"github.com/fantasticrabbit/ClickupCLI/client"
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,11 +21,11 @@ var listsCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		viper.BindPFlag("archived", cmd.Flags().Lookup("archived"))
-		l := api.ListRequest{
+		l := client.ListRequest{
 			FolderID: strings.Trim(args[0], " "),
 			Archived: viper.GetBool("archived"),
 		}
-		api.Request(l)
+		client.Request(l)
 	},
 }
 

@@ -3,7 +3,7 @@ package cmd
 import (
 	"strings"
 
-	"github.com/fantasticrabbit/ClickupCLI/api"
+	"github.com/fantasticrabbit/ClickupCLI/client"
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,14 +23,14 @@ var taskCmd = &cobra.Command{
 		viper.BindPFlag("custom", cmd.Flags().Lookup("custom"))
 		viper.BindPFlag("subtasks", cmd.Flags().Lookup("subtasks"))
 
-		var t = api.TaskRequest{
+		var t = client.TaskRequest{
 			TaskID:     strings.Trim(args[0], "#"),
 			CustomTask: viper.GetBool("custom"),
 			TeamID:     viper.GetString("team"),
 			Subtasks:   viper.GetBool("subtasks"),
 		}
 
-		api.Request(t)
+		client.Request(t)
 	},
 }
 

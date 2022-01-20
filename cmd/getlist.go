@@ -3,7 +3,7 @@ package cmd
 import (
 	"strings"
 
-	"github.com/fantasticrabbit/ClickupCLI/api"
+	"github.com/fantasticrabbit/ClickupCLI/client"
 	"github.com/fantasticrabbit/ClickupCLI/internal"
 	"github.com/spf13/cobra"
 )
@@ -21,11 +21,11 @@ var listCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 
-		l := api.ListRequest{
+		l := client.ListRequest{
 			ListID: strings.Trim(args[0], " "),
 		}
 
-		api.Request(l)
+		client.Request(l)
 	},
 }
 
