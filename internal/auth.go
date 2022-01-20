@@ -18,8 +18,8 @@ const (
 	ProdAPIbaseV2 = "https://app.clickup.com/api/v2"
 )
 
-// CheckToken returns True if a user auth token is availalble, otherwise false
-func CheckToken() bool {
+// CheckTokenExists returns True if a user auth token is availalble, otherwise false
+func CheckTokenExists() bool {
 	if !viper.InConfig("token") || viper.GetString("token") == "" {
 		return false
 	} else {

@@ -15,7 +15,7 @@ var taskCmd = &cobra.Command{
 	Long:  `Request JSON data for a single task in an authorized Clickup workspace`,
 	Args:  cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
-		if authed := internal.CheckToken(); !authed {
+		if authed := internal.CheckTokenExists(); !authed {
 			internal.SaveToken(internal.GetToken())
 		}
 	},

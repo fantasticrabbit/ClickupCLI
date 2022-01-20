@@ -15,7 +15,7 @@ var listsCmd = &cobra.Command{
 	Long:  `Request JSON data for all lists by folder ID`,
 	Args:  cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
-		if authed := internal.CheckToken(); !authed {
+		if authed := internal.CheckTokenExists(); !authed {
 			internal.SaveToken(internal.GetToken())
 		}
 	},
