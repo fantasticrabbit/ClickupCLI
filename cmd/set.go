@@ -12,7 +12,6 @@ import (
 // message for the setting. only string flags allowed
 var configOptions = map[string]string{
 	"team":  "set the Team ID",
-	"port":  "set the Redirect URL Port number",
 	"token": "set the Auth Token manually",
 }
 
