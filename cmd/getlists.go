@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/api"
@@ -14,12 +13,7 @@ var listsCmd = &cobra.Command{
 	Use:   "lists FOLDERID",
 	Short: "get data for lists in a folder",
 	Long:  `Request JSON data for all lists by folder ID`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return errors.New("requires the folder-id argument")
-		}
-		return nil
-	},
+	Args:  cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if authed := internal.CheckToken(); !authed {
 			internal.SaveToken(internal.GetToken())

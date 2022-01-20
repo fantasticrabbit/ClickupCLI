@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"errors"
-
 	"github.com/fantasticrabbit/ClickupCLI/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -22,12 +20,7 @@ var setCmd = &cobra.Command{
 	Short: "sets config options",
 	Long: `set is used to configure extended options and save
 	them to the config file`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 0 {
-			return errors.New("incorrect number of arguments")
-		}
-		return nil
-	},
+	Args: cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		for flag := range configOptions {
 			value, _ := cmd.Flags().GetString(flag)

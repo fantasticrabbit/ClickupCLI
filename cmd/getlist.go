@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/api"
@@ -14,12 +13,7 @@ var listCmd = &cobra.Command{
 	Short: "get data for a list object by supplying it's list id",
 	Long: `Request JSON data for a list objectin an authorized 
 	Clickup workspace`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return errors.New("incorrect number of arguments")
-		}
-		return nil
-	},
+	Args: cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if authed := internal.CheckToken(); !authed {
 			internal.SaveToken(internal.GetToken())

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/fantasticrabbit/ClickupCLI/api"
@@ -15,12 +14,7 @@ var flessListsCmd = &cobra.Command{
 	Short: "get data for lists in a workspace not in a folder",
 	Long: `Request JSON data for all folderless lists 
 	by workspace ID`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return errors.New("incorrect number of arguments")
-		}
-		return nil
-	},
+	Args: cobra.ExactArgs(1),
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if authed := internal.CheckToken(); !authed {
 			internal.SaveToken(internal.GetToken())
