@@ -20,11 +20,7 @@ const (
 
 // CheckTokenExists returns True if a user auth token is availalble, otherwise false
 func CheckTokenExists() bool {
-	if !viper.InConfig("token") || viper.GetString("token") == "" {
-		return false
-	} else {
-		return true
-	}
+	return viper.InConfig("token") || viper.GetString("token") != ""
 }
 
 // SaveToken saves the API Access Token to the config file for re-use
